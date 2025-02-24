@@ -2,7 +2,9 @@ package com.azvtech.live_bus_tracking_service.handler;
 
 import com.azvtech.live_bus_tracking_service.dto.GpsDataDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -26,22 +28,23 @@ public class GpsWebSocketHandler extends TextWebSocketHandler {
 
     public GpsWebSocketHandler() {
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
         sessions.add(session);
         System.out.println("New client connected: " + session.getId());
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+    public void afterConnectionClosed(@NonNull WebSocketSession session, CloseStatus status) {
         sessions.remove(session);
         System.out.println("Closed connection: " + session.getId() + " - Reason: " + status.getReason());
     }
 
     @Override
-    public void handleTransportError(WebSocketSession session, Throwable exception) {
+    public void handleTransportError(@NonNull WebSocketSession session, Throwable exception) {
         sessions.remove(session);
         System.err.println("Error in session " + session.getId() + ": " + exception.getMessage());
     }

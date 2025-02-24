@@ -26,17 +26,18 @@ import java.util.Map;
 public class GpsPollingService {
 
     @Autowired
-    private GpsWebSocketHandler webSocketHandler;
+    private final GpsWebSocketHandler webSocketHandler;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String GPS_ENDPOINT = "https://dados.mobilidade.rio/gps/sppo";
 
-    public GpsPollingService() {
+    public GpsPollingService(GpsWebSocketHandler webSocketHandler) {
+        this.webSocketHandler = webSocketHandler;
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-    @Scheduled(fixedDelay = 25000) // Polling a cada 25 segundos
+    @Scheduled(fixedDelay = 25000)
     public void checkForUpdates() {
         System.out.println("Method checkForUpdates executed in: " + LocalDateTime.now());
         try {
@@ -49,9 +50,9 @@ public class GpsPollingService {
             List<GpsDataDTO> gpsData = fetchGpsData(dataInicialStr, dataFinalStr);
             Map<String, GpsDataDTO> latestUpdates = getLatestUpdates(gpsData);
             processData(latestUpdates);
-            System.out.println("Dados: " + latestUpdates.size());
+            System.out.println("Data quantity: " + latestUpdates.size());
         } catch (IOException e) {
-            System.err.println("Erro ao buscar ou processar dados de GPS: " + e.getMessage());
+            System.err.println("Error fetching or processing GPS data: " + e.getMessage());
         }
     }
 
@@ -66,7 +67,8 @@ public class GpsPollingService {
     }
 
     private List<GpsDataDTO> parseGpsData(String jsonData) throws IOException {
-        return objectMapper.readValue(jsonData, new TypeReference<List<GpsDataDTO>>() {});
+        return objectMapper.readValue(jsonData, new TypeReference<>() {
+        });
     }
 
     private Map<String, GpsDataDTO> getLatestUpdates(List<GpsDataDTO> gpsData) {
@@ -84,16 +86,18 @@ public class GpsPollingService {
 
     private void processData(Map<String, GpsDataDTO> data) {
         if (data == null || data.isEmpty()) {
-            System.out.println("Dados inválidos ou vazios recebidos.");
+            System.out.println("Invalid or empty data received.");
             return;
         }
 
-        // Converte o Map para uma lista de valores (GpsDataDTO)
         List<GpsDataDTO> latestUpdatesList = List.copyOf(data.values());
-        // System.out.println("Novos dados recebidos: " + data);
-        // Notifique os clientes via WebSocket
-        webSocketHandler.broadcastUpdate(latestUpdatesList);
-        System.out.println("Novos dados recebidos: " + latestUpdatesList.size());
 
+        /* if (!latestUpdatesList.isEmpty()) {
+            GpsDataDTO firstObject = latestUpdatesList.get(0);
+            System.out.println("First object in the list: " + firstObject);
+        } */
+
+        webSocketHandler.broadcastUpdate(latestUpdatesList);
+        System.out.println("New data received: " + latestUpdatesList.size());
     }
 }

@@ -1,5 +1,7 @@
 package com.azvtech.live_bus_tracking_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -11,12 +13,15 @@ import java.time.ZoneId;
 public class GpsDataDTO {
 
     private String ordem;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double  longitude;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime datahora;
     private int velocidade;
     private String linha;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime datahoraenvio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime datahoraservidor;
 
     public String getOrdem() {
@@ -27,20 +32,20 @@ public class GpsDataDTO {
         this.ordem = ordem;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setLatitude(String  latitude) {
+        this.latitude = Double.parseDouble(latitude.replace(",", "."));
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
     public void setLongitude(String longitude) {
-        this.longitude = longitude;
+        this.longitude = Double.parseDouble(longitude.replace(",", "."));
     }
 
     public int getVelocidade() {
@@ -85,5 +90,19 @@ public class GpsDataDTO {
 
     public boolean isMoreRecentThan(GpsDataDTO other) {
         return this.datahoraservidor.isAfter(other.getDatahoraservidor());
+    }
+
+    @Override
+    public String toString() {
+        return "GpsDataDTO{" +
+                "ordem='" + ordem + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", datahora=" + datahora +
+                ", velocidade=" + velocidade +
+                ", linha='" + linha + '\'' +
+                ", datahoraenvio=" + datahoraenvio +
+                ", datahoraservidor=" + datahoraservidor +
+                '}';
     }
 }
