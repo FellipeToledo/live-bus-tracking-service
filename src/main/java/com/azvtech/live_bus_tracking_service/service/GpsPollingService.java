@@ -10,6 +10,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,11 +29,12 @@ import java.util.Map;
 @Service
 public class GpsPollingService {
 
-    private final GpsWebSocketHandler webSocketHandler;
+    @Value("${gps.endpoint}")
+    private String gpsEndpoint;
 
+    private final GpsWebSocketHandler webSocketHandler;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String GPS_ENDPOINT = "https://dados.mobilidade.rio/gps/sppo";
 
     // Métricas
     private final Counter dataProcessedCounter;
@@ -87,7 +89,7 @@ public class GpsPollingService {
     }
 
     private List<GpsDataDTO> fetchGpsData(String dataInicial, String dataFinal) throws IOException {
-        String url = UriComponentsBuilder.fromUriString(GPS_ENDPOINT)
+        String url = UriComponentsBuilder.fromUriString(gpsEndpoint)
                 .queryParam("dataInicial", dataInicial)
                 .queryParam("dataFinal", dataFinal)
                 .toUriString();
