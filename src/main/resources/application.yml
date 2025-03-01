@@ -1,3 +1,6 @@
+gps:
+  endpoint: https://dados.mobilidade.rio/gps/sppo
+  batch-size: 10
 management:
   endpoints:
     web:
