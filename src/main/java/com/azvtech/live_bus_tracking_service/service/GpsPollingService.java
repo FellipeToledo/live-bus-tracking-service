@@ -6,6 +6,9 @@ import com.azvtech.live_bus_tracking_service.utils.DateUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,35 +28,62 @@ import java.util.Map;
 @Service
 public class GpsPollingService {
 
-    @Autowired
     private final GpsWebSocketHandler webSocketHandler;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String GPS_ENDPOINT = "https://dados.mobilidade.rio/gps/sppo";
 
-    public GpsPollingService(GpsWebSocketHandler webSocketHandler) {
+    // Métricas
+    private final Counter dataProcessedCounter;
+    private final Counter errorCounter;
+    private final Timer pollingTimer;
+
+    @Autowired
+    public GpsPollingService(GpsWebSocketHandler webSocketHandler, MeterRegistry registry) {
         this.webSocketHandler = webSocketHandler;
         objectMapper.registerModule(new JavaTimeModule());
+
+        dataProcessedCounter = Counter.builder("gps.data.processed")
+                .description("Quantidade de dados de GPS processados")
+                .register(registry);
+
+        errorCounter = Counter.builder("gps.errors")
+                .description("Quantidade de erros durante o polling")
+                .register(registry);
+
+        pollingTimer = Timer.builder("gps.polling.timer")
+                .description("Tempo de execução do polling")
+                .publishPercentileHistogram(true)
+                .register(registry);
+
     }
 
     @Scheduled(fixedDelay = 25000)
     public void checkForUpdates() {
-        System.out.println("Method checkForUpdates executed in: " + LocalDateTime.now());
-        try {
-            LocalDateTime dataFinal = LocalDateTime.now();
-            LocalDateTime dataInicial = dataFinal.minusMinutes(20);
+        pollingTimer.record(() -> {
+            System.out.println("Method checkForUpdates executed in: " + LocalDateTime.now());
+            try {
+                LocalDateTime dataFinal = LocalDateTime.now();
+                LocalDateTime dataInicial = dataFinal.minusMinutes(20);
 
-            String dataInicialStr = DateUtils.format(dataInicial);
-            String dataFinalStr = DateUtils.format(dataFinal);
+                String dataInicialStr = DateUtils.format(dataInicial);
+                String dataFinalStr = DateUtils.format(dataFinal);
 
-            List<GpsDataDTO> gpsData = fetchGpsData(dataInicialStr, dataFinalStr);
-            Map<String, GpsDataDTO> latestUpdates = getLatestUpdates(gpsData);
-            processData(latestUpdates);
-            System.out.println("Data quantity: " + latestUpdates.size());
-        } catch (IOException e) {
-            System.err.println("Error fetching or processing GPS data: " + e.getMessage());
-        }
+                List<GpsDataDTO> gpsData = fetchGpsData(dataInicialStr, dataFinalStr);
+                Map<String, GpsDataDTO> latestUpdates = getLatestUpdates(gpsData);
+                processData(latestUpdates);
+
+                // Registrar métrica de dados processados
+
+                dataProcessedCounter.increment(latestUpdates.size());
+                System.out.println("Dados processados: " + latestUpdates.size());
+            } catch (IOException e) {
+                // Registrar métrica de erro
+                errorCounter.increment();
+                System.err.println("Erro ao buscar ou processar dados de GPS: " + e.getMessage());
+            }
+        });
     }
 
     private List<GpsDataDTO> fetchGpsData(String dataInicial, String dataFinal) throws IOException {
