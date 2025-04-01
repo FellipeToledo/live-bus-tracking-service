@@ -1,6 +1,6 @@
 # Live Bus Tracking Service
 
-ServiÃ§o responsável por coletar dados de GPS de ônibus em tempo real, aplicar regras de negócio e notificar clientes via WebSocket.
+Serviço responsável por coletar dados de GPS de ônibus em tempo real, aplicar regras de negócio e notificar clientes via WebSocket.
 
 ## Visão Geral
 
