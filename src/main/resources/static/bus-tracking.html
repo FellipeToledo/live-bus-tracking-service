@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bus Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status-connected {
+            color: green;
+            font-weight: bold;
+        }
+        .status-disconnected {
+            color: red;
+            font-weight: bold;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        #search {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .last-update {
+            text-align: right;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pagination button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Live Bus Tracking</h1>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-value" id="total-buses">0</div>
+            <div class="stat-label">Ônibus Em Operação</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="visible-buses">0</div>
+            <div class="stat-label">Exibindo</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="connection-status">Desconectado</div>
+            <div class="stat-label">Status Conexão</div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <label for="search"></label><input type="text" id="search" placeholder="Buscar por linha, ordem...">
+    </div>
+
+    <div class="last-update" id="last-update-time"></div>
+
+    <div class="pagination">
+        <button id="prev-page">Anterior</button>
+        <span id="page-info">Página 1 de 1</span>
+        <button id="next-page">Próxima</button>
+    </div>
+
+    <table id="buses-table">
+        <thead>
+        <tr>
+            <th onclick="sortTable(0)">Ordem</th>
+            <th onclick="sortTable(1)">Linha</th>
+            <th onclick="sortTable(2)">Latitude</th>
+            <th onclick="sortTable(3)">Longitude</th>
+            <th onclick="sortTable(4)">Velocidade (km/h)</th>
+            <th onclick="sortTable(5)">Última Atualização</th>
+        </tr>
+        </thead>
+        <tbody id="buses-body">
+        <!-- Os dados serão inseridos aqui via JavaScript -->
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prev-page-bottom">Anterior</button>
+        <span id="page-info-bottom">Página 1 de 1</span>
+        <button id="next-page-bottom">Próxima</button>
+    </div>
+</div>
+
+<script>
+    let allBusesData = [];
+       let currentUpdateBusesData = []; // Dados da atualização atual (todos os batches)
+       let filteredBusesData = [];
+       let currentPage = 1;
+       const itemsPerPage = 50;
+       let currentSortColumn = -1;
+       let sortDirection = 1;
+
+       // Variáveis para controlar a atualização atual
+       let currentBatchNumber = 0;
+       let currentTotalBatches = 0;
+       let currentUpdateId = 0;
+
+       // Conectar ao WebSocket
+       const connectWebSocket = () => {
+           const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+           const wsUrl = `${protocol}//${window.location.host}/gps-updates`;
+
+           console.log('Conectando ao WebSocket:', wsUrl);
+           const ws = new WebSocket(wsUrl);
+
+           ws.onopen = () => {
+               console.log('Conectado ao WebSocket');
+               document.getElementById('connection-status').textContent = 'Conectado';
+               document.getElementById('connection-status').className = 'status-connected';
+               document.getElementById('last-update-time').textContent = 'Conectado - aguardando dados...';
+
+               // Resetar dados da atualização atual
+               currentUpdateBusesData = [];
+               currentBatchNumber = 0;
+               currentTotalBatches = 0;
+               currentUpdateId++;
+           };
+
+           ws.onmessage = (event) => {
+               try {
+                   const message = JSON.parse(event.data);
+                   console.log('Mensagem recebida:', message);
+
+                   // Verificar se é o formato com metadados
+                   if (message.batch && Array.isArray(message.batch)) {
+                       const batchData = message.batch;
+                       const batchNumber = message.batchNumber;
+                       const totalBatches = message.totalBatches;
+
+                       console.log(`Recebido batch ${batchNumber}/${totalBatches} com ${batchData.length} registros`);
+
+                       // Se for uma nova atualização (batchNumber = 1), resetar os dados
+                       if (batchNumber === 1) {
+                           currentUpdateBusesData = [];
+                           currentTotalBatches = totalBatches;
+                           currentUpdateId++;
+                           console.log(`Iniciando nova atualização #${currentUpdateId} com ${totalBatches} batches`);
+                       }
+
+                       // Acumular dados da atualização atual
+                       currentUpdateBusesData = currentUpdateBusesData.concat(batchData);
+
+                       // Se for o último batch desta atualização, processar os dados
+                       if (batchNumber === totalBatches) {
+                           console.log(`Último batch recebido. Total de ${currentUpdateBusesData.length} ônibus na atualização #${currentUpdateId}`);
+
+                           // MANTER APENAS OS DADOS DA ÚLTIMA ATUALIZAÇÃO COMPLETA
+                           allBusesData = [...currentUpdateBusesData];
+
+                           // ATUALIZAR OS DADOS FILTRADOS com base na busca atual
+                           const searchTerm = document.getElementById('search').value.toLowerCase();
+                           if (!searchTerm) {
+                               filteredBusesData = [...allBusesData];
+                           } else {
+                               filteredBusesData = allBusesData.filter(bus =>
+                                   (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
+                                   (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
+                               );
+                           }
+
+                           // Atualizar interface
+                           updateStats();
+                           renderTable();
+
+                           document.getElementById('last-update-time').textContent =
+                               `Última atualização: ${new Date().toLocaleTimeString()}`;
+                       }
+
+                   } else if (Array.isArray(message)) {
+                       console.log('Recebidos', message.length, 'registros (formato antigo)');
+                       // Formato antigo: tratar como atualização completa
+                       allBusesData = [...message];
+                       filteredBusesData = [...allBusesData];
+                       updateStats();
+                       renderTable();
+
+                       document.getElementById('last-update-time').textContent =
+                           `Última atualização: ${new Date().toLocaleTimeString()} `;
+                   } else {
+                       console.error('Formato de mensagem desconhecido:', message);
+                   }
+
+               } catch (error) {
+                   console.error('Erro ao processar dados:', error);
+               }
+           };
+
+           ws.onclose = () => {
+               console.log('Conexão WebSocket fechada');
+               document.getElementById('connection-status').textContent = 'Desconectado';
+               document.getElementById('connection-status').className = 'status-disconnected';
+               document.getElementById('last-update-time').textContent = 'Desconectado - tentando reconectar...';
+
+               setTimeout(connectWebSocket, 5000);
+           };
+
+           ws.onerror = (error) => {
+               console.error('Erro WebSocket:', error);
+               document.getElementById('connection-status').textContent = 'Erro';
+               document.getElementById('connection-status').className = 'status-disconnected';
+           };
+       };
+
+       // Atualizar a tabela com os dados recebidos
+       const renderTable = () => {
+           const tableBody = document.getElementById('buses-body');
+
+           if (filteredBusesData.length === 0) {
+               tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
+               return;
+           }
+
+           const startIndex = (currentPage - 1) * itemsPerPage;
+           const endIndex = Math.min(startIndex + itemsPerPage, filteredBusesData.length);
+           const pageData = filteredBusesData.slice(startIndex, endIndex);
+
+           let tableHtml = '';
+           pageData.forEach(bus => {
+               tableHtml += `
+                   <tr>
+                       <td>${bus.ordem || 'N/A'}</td>
+                       <td>${bus.linha || 'N/A'}</td>
+                       <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
+                       <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
+                       <td>${bus.velocidade || '0'}</td>
+                       <td>${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}</td>
+                   </tr>
+               `;
+           });
+
+           tableBody.innerHTML = tableHtml;
+           updatePagination();
+       };
+
+       // Atualizar estatísticas
+       const updateStats = () => {
+           document.getElementById('total-buses').textContent = allBusesData.length;
+           document.getElementById('visible-buses').textContent = filteredBusesData.length;
+       };
+
+       // Atualizar controles de paginação
+       const updatePagination = () => {
+           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+           const pageInfo = `Página ${currentPage} de ${totalPages}`;
+
+           document.getElementById('page-info').textContent = pageInfo;
+           document.getElementById('page-info-bottom').textContent = pageInfo;
+
+           document.getElementById('prev-page').disabled = currentPage === 1;
+           document.getElementById('prev-page-bottom').disabled = currentPage === 1;
+           document.getElementById('next-page').disabled = currentPage === totalPages || totalPages === 0;
+           document.getElementById('next-page-bottom').disabled = currentPage === totalPages || totalPages === 0;
+       };
+
+       // Função para ordenar a tabela
+       const sortTable = (columnIndex) => {
+           if (currentSortColumn === columnIndex) {
+               sortDirection *= -1;
+           } else {
+               currentSortColumn = columnIndex;
+               sortDirection = 1;
+           }
+
+           filteredBusesData.sort((a, b) => {
+               let valueA, valueB;
+
+               switch (columnIndex) {
+                   case 0: valueA = a.ordem; valueB = b.ordem; break;
+                   case 1: valueA = a.linha; valueB = b.linha; break;
+                   case 2: valueA = a.latitude; valueB = b.latitude; break;
+                   case 3: valueA = a.longitude; valueB = b.longitude; break;
+                   case 4: valueA = a.velocidade; valueB = b.velocidade; break;
+                   case 5: valueA = new Date(a.datahoraservidor); valueB = new Date(b.datahoraservidor); break;
+                   default: return 0;
+               }
+
+               if (valueA < valueB) return -1 * sortDirection;
+               if (valueA > valueB) return 1 * sortDirection;
+               return 0;
+           });
+
+           currentPage = 1;
+           renderTable();
+       };
+
+       // Filtrar tabela com base na busca
+       document.getElementById('search').addEventListener('input', (event) => {
+           const searchTerm = event.target.value.toLowerCase();
+
+           if (!searchTerm) {
+               filteredBusesData = [...allBusesData];
+           } else {
+               filteredBusesData = allBusesData.filter(bus =>
+                   (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
+                   (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
+               );
+           }
+
+           currentPage = 1;
+           updateStats();
+           renderTable();
+       });
+
+       // Navegação de páginas
+       document.getElementById('next-page').addEventListener('click', () => {
+           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+           if (currentPage < totalPages) {
+               currentPage++;
+               renderTable();
+           }
+       });
+
+       document.getElementById('prev-page').addEventListener('click', () => {
+           if (currentPage > 1) {
+               currentPage--;
+               renderTable();
+           }
+       });
+
+       document.getElementById('next-page-bottom').addEventListener('click', () => {
+           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+           if (currentPage < totalPages) {
+               currentPage++;
+               renderTable();
+           }
+       });
+
+       document.getElementById('prev-page-bottom').addEventListener('click', () => {
+           if (currentPage > 1) {
+               currentPage--;
+               renderTable();
+           }
+       });
+
+       // Iniciar conexão quando a página carregar
+       window.onload = connectWebSocket;
+</script>
+</body>
+</html>

@@ -15,7 +15,9 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -78,27 +80,35 @@ public class GpsWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void broadcastUpdate(List<GpsDataDTO> data) {
-        logger.info("Broadcasting update to {} clients", sessions.size());
+        logger.info("Broadcasting {} records to {} clients in batches of {}",
+                data.size(), sessions.size(), batchSize);
+
+        int totalBatches = (int) Math.ceil((double) data.size() / batchSize);
+
         for (int i = 0; i < data.size(); i += batchSize) {
             List<GpsDataDTO> batch = data.subList(i, Math.min(i + batchSize, data.size()));
-            sendBatch(batch);
+            sendBatch(batch, i/batchSize + 1, totalBatches);
         }
     }
 
-    private void sendBatch(List<GpsDataDTO> batch) {
+    private void sendBatch(List<GpsDataDTO> batch, int batchNumber, int totalBatches) {
         try {
-            String jsonBatch = objectMapper.writeValueAsString(batch);
-            TextMessage message = new TextMessage(jsonBatch);
+            Map<String, Object> messageWrapper = new HashMap<>();
+            messageWrapper.put("batch", batch);
+            messageWrapper.put("batchNumber", batchNumber);
+            messageWrapper.put("totalBatches", totalBatches);
+            messageWrapper.put("totalRecords", batch.size());
+
+            String jsonMessage = objectMapper.writeValueAsString(messageWrapper);
+            TextMessage message = new TextMessage(jsonMessage);
 
             for (WebSocketSession session : sessions) {
                 if (session.isOpen()) {
                     session.sendMessage(message);
-                } else {
-                    sessions.remove(session);
                 }
             }
         } catch (IOException e) {
-            logger.error("Error sending batch data: {}", e.getMessage(), e);
+            logger.error("Error sending batch: {}", e.getMessage(), e);
         }
     }
 }
