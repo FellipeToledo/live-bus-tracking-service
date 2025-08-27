@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Bus Tracking</title>
+    <!-- Adicionando Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,12 +76,25 @@
         }
         .search-container {
             margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
         }
         #search {
             padding: 10px;
-            width: 100%;
+            flex: 1;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        #search-map-btn {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #search-map-btn:hover {
+            background-color: #45a049;
         }
         .last-update {
             text-align: right;
@@ -105,6 +122,94 @@
             background-color: #4CAF50;
             color: white;
         }
+        /* Estilos para o mapa */
+        #map-container {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            display: none; /* Inicialmente oculto */
+        }
+        #map-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 8px;
+            z-index: 1;
+        }
+        .map-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .map-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .map-toggle {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .show-all-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .show-all-btn:hover {
+            background-color: #2980b9;
+        }
+        .bus-marker {
+            background-color: #2c3e50;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+        }
+        .bus-marker-line {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .map-info {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        @media (max-width: 768px) {
+            .map-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -127,7 +232,8 @@
     </div>
 
     <div class="search-container">
-        <label for="search"></label><input type="text" id="search" placeholder="Buscar por linha, ordem...">
+        <input type="text" id="search" placeholder="Buscar por linha, ordem...">
+        <button id="search-map-btn">Buscar e Mostrar Mapa</button>
     </div>
 
     <div class="last-update" id="last-update-time"></div>
@@ -159,261 +265,452 @@
         <span id="page-info-bottom">Página 1 de 1</span>
         <button id="next-page-bottom">Próxima</button>
     </div>
+
+    <!-- Container para o mapa -->
+    <div id="map-container">
+        <div id="map-title">Visualização dos Ônibus no Mapa</div>
+        <div class="map-controls">
+            <div class="map-buttons">
+                <button id="toggle-map" class="map-toggle">Ocultar Mapa</button>
+                <button id="show-all-btn" class="show-all-btn">Mostrar Todos no Mapa</button>
+            </div>
+            <span id="map-buses-count" class="map-info">0 ônibus no mapa</span>
+        </div>
+        <div id="map"></div>
+    </div>
 </div>
+
+<!-- Adicionando Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 
 <script>
     let allBusesData = [];
-       let currentUpdateBusesData = []; // Dados da atualização atual (todos os batches)
-       let filteredBusesData = [];
-       let currentPage = 1;
-       const itemsPerPage = 50;
-       let currentSortColumn = -1;
-       let sortDirection = 1;
+    let currentUpdateBusesData = []; // Dados da atualização atual (todos os batches)
+    let filteredBusesData = [];
+    let currentPage = 1;
+    const itemsPerPage = 50;
+    let currentSortColumn = -1;
+    let sortDirection = 1;
 
-       // Variáveis para controlar a atualização atual
-       let currentBatchNumber = 0;
-       let currentTotalBatches = 0;
-       let currentUpdateId = 0;
+    // Variáveis para controlar a atualização atual
+    let currentBatchNumber = 0;
+    let currentTotalBatches = 0;
+    let currentUpdateId = 0;
 
-       // Conectar ao WebSocket
-       const connectWebSocket = () => {
-           const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-           const wsUrl = `${protocol}//${window.location.host}/gps-updates`;
+    // Variáveis para o mapa
+    let map = null;
+    let busMarkers = {};
+    let showMap = false;
+    let mapInitialized = false;
+    let showingAllBuses = false;
 
-           console.log('Conectando ao WebSocket:', wsUrl);
-           const ws = new WebSocket(wsUrl);
+    // Inicializar o mapa
+    const initMap = () => {
+        // Coordenadas padrão (centro da cidade, por exemplo)
+        const defaultCenter = [-23.5505, -46.6333]; // São Paulo
 
-           ws.onopen = () => {
-               console.log('Conectado ao WebSocket');
-               document.getElementById('connection-status').textContent = 'Conectado';
-               document.getElementById('connection-status').className = 'status-connected';
-               document.getElementById('last-update-time').textContent = 'Conectado - aguardando dados...';
+        map = L.map('map').setView(defaultCenter, 12);
 
-               // Resetar dados da atualização atual
-               currentUpdateBusesData = [];
-               currentBatchNumber = 0;
-               currentTotalBatches = 0;
-               currentUpdateId++;
-           };
+        // Adicionar camada do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-           ws.onmessage = (event) => {
-               try {
-                   const message = JSON.parse(event.data);
-                   console.log('Mensagem recebida:', message);
+        mapInitialized = true;
+    };
 
-                   // Verificar se é o formato com metadados
-                   if (message.batch && Array.isArray(message.batch)) {
-                       const batchData = message.batch;
-                       const batchNumber = message.batchNumber;
-                       const totalBatches = message.totalBatches;
+    // Atualizar marcadores no mapa
+    const updateMapMarkers = (showAll = false) => {
+        if (!mapInitialized) return;
 
-                       console.log(`Recebido batch ${batchNumber}/${totalBatches} com ${batchData.length} registros`);
+        // Limpar marcadores antigos
+        Object.values(busMarkers).forEach(marker => {
+            map.removeLayer(marker);
+        });
+        busMarkers = {};
 
-                       // Se for uma nova atualização (batchNumber = 1), resetar os dados
-                       if (batchNumber === 1) {
-                           currentUpdateBusesData = [];
-                           currentTotalBatches = totalBatches;
-                           currentUpdateId++;
-                           console.log(`Iniciando nova atualização #${currentUpdateId} com ${totalBatches} batches`);
-                       }
+        // Determinar quais dados usar
+        const dataToShow = showAll ? allBusesData : filteredBusesData;
+        showingAllBuses = showAll;
 
-                       // Acumular dados da atualização atual
-                       currentUpdateBusesData = currentUpdateBusesData.concat(batchData);
+        // Atualizar texto do botão
+        document.getElementById('show-all-btn').textContent =
+            showAll ? 'Voltar para Busca' : 'Mostrar Todos no Mapa';
 
-                       // Se for o último batch desta atualização, processar os dados
-                       if (batchNumber === totalBatches) {
-                           console.log(`Último batch recebido. Total de ${currentUpdateBusesData.length} ônibus na atualização #${currentUpdateId}`);
+        // Verificar se há dados para exibir no mapa
+        if (dataToShow.length === 0) {
+            document.getElementById('map-buses-count').textContent = 'Nenhum ônibus para exibir';
+            return;
+        }
 
-                           // MANTER APENAS OS DADOS DA ÚLTIMA ATUALIZAÇÃO COMPLETA
-                           allBusesData = [...currentUpdateBusesData];
+        // Adicionar novos marcadores apenas para os ônibus com coordenadas
+        const busesWithCoords = dataToShow.filter(bus => bus.latitude && bus.longitude);
 
-                           // ATUALIZAR OS DADOS FILTRADOS com base na busca atual
-                           const searchTerm = document.getElementById('search').value.toLowerCase();
-                           if (!searchTerm) {
-                               filteredBusesData = [...allBusesData];
-                           } else {
-                               filteredBusesData = allBusesData.filter(bus =>
-                                   (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
-                                   (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
-                               );
-                           }
+        busesWithCoords.forEach(bus => {
+            // Criar marcador personalizado
+            const markerIcon = L.divIcon({
+                className: 'bus-marker-icon',
+                html: `
+                    <div class="bus-marker">
+                        <div class="bus-marker-line">${bus.linha || ''}</div>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
 
-                           // Atualizar interface
-                           updateStats();
-                           renderTable();
+            const marker = L.marker([bus.latitude, bus.longitude], {icon: markerIcon})
+                .addTo(map);
 
-                           document.getElementById('last-update-time').textContent =
-                               `Última atualização: ${new Date().toLocaleTimeString()}`;
-                       }
+            // Adicionar popup com informações do ônibus
+            marker.bindPopup(`
+                <strong>Ônibus ${bus.ordem || 'N/A'}</strong><br>
+                Linha: ${bus.linha || 'N/A'}<br>
+                Velocidade: ${bus.velocidade || '0'} km/h<br>
+                Última atualização: ${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}
+            `);
 
-                   } else if (Array.isArray(message)) {
-                       console.log('Recebidos', message.length, 'registros (formato antigo)');
-                       // Formato antigo: tratar como atualização completa
-                       allBusesData = [...message];
-                       filteredBusesData = [...allBusesData];
-                       updateStats();
-                       renderTable();
+            busMarkers[bus.ordem] = marker;
+        });
 
-                       document.getElementById('last-update-time').textContent =
-                           `Última atualização: ${new Date().toLocaleTimeString()} `;
-                   } else {
-                       console.error('Formato de mensagem desconhecido:', message);
-                   }
+        // Atualizar contador no mapa
+        const totalBuses = Object.keys(busMarkers).length;
+        const totalText = showAll ?
+            `${totalBuses} de ${allBusesData.length} ônibus no mapa (todos)` :
+            `${totalBuses} ônibus no mapa`;
 
-               } catch (error) {
-                   console.error('Erro ao processar dados:', error);
-               }
-           };
+        document.getElementById('map-buses-count').textContent = totalText;
 
-           ws.onclose = () => {
-               console.log('Conexão WebSocket fechada');
-               document.getElementById('connection-status').textContent = 'Desconectado';
-               document.getElementById('connection-status').className = 'status-disconnected';
-               document.getElementById('last-update-time').textContent = 'Desconectado - tentando reconectar...';
+        // Ajustar visualização do mapa se houver marcadores
+        if (totalBuses > 0) {
+            const group = new L.featureGroup(Object.values(busMarkers));
+            map.fitBounds(group.getBounds().pad(0.1));
+        }
+    };
 
-               setTimeout(connectWebSocket, 5000);
-           };
+    // Mostrar ou esconder o mapa
+    const toggleMapVisibility = (visible) => {
+        const mapContainer = document.getElementById('map-container');
+        const toggleButton = document.getElementById('toggle-map');
 
-           ws.onerror = (error) => {
-               console.error('Erro WebSocket:', error);
-               document.getElementById('connection-status').textContent = 'Erro';
-               document.getElementById('connection-status').className = 'status-disconnected';
-           };
-       };
+        if (visible) {
+            // Inicializar o mapa se não foi inicializado ainda
+            if (!mapInitialized) {
+                initMap();
+            }
 
-       // Atualizar a tabela com os dados recebidos
-       const renderTable = () => {
-           const tableBody = document.getElementById('buses-body');
+            mapContainer.style.display = 'block';
+            toggleButton.textContent = 'Ocultar Mapa';
 
-           if (filteredBusesData.length === 0) {
-               tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
-               return;
-           }
+            // Atualizar marcadores no mapa
+            updateMapMarkers(showingAllBuses);
 
-           const startIndex = (currentPage - 1) * itemsPerPage;
-           const endIndex = Math.min(startIndex + itemsPerPage, filteredBusesData.length);
-           const pageData = filteredBusesData.slice(startIndex, endIndex);
+            // Redimensionar o mapa para garantir que ele se renderize corretamente
+            setTimeout(() => {
+                if (mapInitialized) map.invalidateSize();
+            }, 100);
+        } else {
+            mapContainer.style.display = 'none';
+            toggleButton.textContent = 'Mostrar Mapa';
+        }
 
-           let tableHtml = '';
-           pageData.forEach(bus => {
-               tableHtml += `
-                   <tr>
-                       <td>${bus.ordem || 'N/A'}</td>
-                       <td>${bus.linha || 'N/A'}</td>
-                       <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
-                       <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
-                       <td>${bus.velocidade || '0'}</td>
-                       <td>${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}</td>
-                   </tr>
-               `;
-           });
+        showMap = visible;
+    };
 
-           tableBody.innerHTML = tableHtml;
-           updatePagination();
-       };
+    // Conectar ao WebSocket
+    const connectWebSocket = () => {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/gps-updates`;
 
-       // Atualizar estatísticas
-       const updateStats = () => {
-           document.getElementById('total-buses').textContent = allBusesData.length;
-           document.getElementById('visible-buses').textContent = filteredBusesData.length;
-       };
+        console.log('Conectando ao WebSocket:', wsUrl);
+        const ws = new WebSocket(wsUrl);
 
-       // Atualizar controles de paginação
-       const updatePagination = () => {
-           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-           const pageInfo = `Página ${currentPage} de ${totalPages}`;
+        ws.onopen = () => {
+            console.log('Conectado ao WebSocket');
+            document.getElementById('connection-status').textContent = 'Conectado';
+            document.getElementById('connection-status').className = 'status-connected';
+            document.getElementById('last-update-time').textContent = 'Conectado - aguardando dados...';
 
-           document.getElementById('page-info').textContent = pageInfo;
-           document.getElementById('page-info-bottom').textContent = pageInfo;
+            // Resetar dados da atualização atual
+            currentUpdateBusesData = [];
+            currentBatchNumber = 0;
+            currentTotalBatches = 0;
+            currentUpdateId++;
+        };
 
-           document.getElementById('prev-page').disabled = currentPage === 1;
-           document.getElementById('prev-page-bottom').disabled = currentPage === 1;
-           document.getElementById('next-page').disabled = currentPage === totalPages || totalPages === 0;
-           document.getElementById('next-page-bottom').disabled = currentPage === totalPages || totalPages === 0;
-       };
+        ws.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                console.log('Mensagem recebida:', message);
 
-       // Função para ordenar a tabela
-       const sortTable = (columnIndex) => {
-           if (currentSortColumn === columnIndex) {
-               sortDirection *= -1;
-           } else {
-               currentSortColumn = columnIndex;
-               sortDirection = 1;
-           }
+                // Verificar se é o formato com metadados
+                if (message.batch && Array.isArray(message.batch)) {
+                    const batchData = message.batch;
+                    const batchNumber = message.batchNumber;
+                    const totalBatches = message.totalBatches;
 
-           filteredBusesData.sort((a, b) => {
-               let valueA, valueB;
+                    console.log(`Recebido batch ${batchNumber}/${totalBatches} com ${batchData.length} registros`);
 
-               switch (columnIndex) {
-                   case 0: valueA = a.ordem; valueB = b.ordem; break;
-                   case 1: valueA = a.linha; valueB = b.linha; break;
-                   case 2: valueA = a.latitude; valueB = b.latitude; break;
-                   case 3: valueA = a.longitude; valueB = b.longitude; break;
-                   case 4: valueA = a.velocidade; valueB = b.velocidade; break;
-                   case 5: valueA = new Date(a.datahoraservidor); valueB = new Date(b.datahoraservidor); break;
-                   default: return 0;
-               }
+                    // Se for uma nova atualização (batchNumber = 1), resetar os dados
+                    if (batchNumber === 1) {
+                        currentUpdateBusesData = [];
+                        currentTotalBatches = totalBatches;
+                        currentUpdateId++;
+                        console.log(`Iniciando nova atualização #${currentUpdateId} com ${totalBatches} batches`);
+                    }
 
-               if (valueA < valueB) return -1 * sortDirection;
-               if (valueA > valueB) return 1 * sortDirection;
-               return 0;
-           });
+                    // Acumular dados da atualização atual
+                    currentUpdateBusesData = currentUpdateBusesData.concat(batchData);
 
-           currentPage = 1;
-           renderTable();
-       };
+                    // Se for o último batch desta atualização, processar os dados
+                    if (batchNumber === totalBatches) {
+                        console.log(`Último batch recebido. Total de ${currentUpdateBusesData.length} ônibus na atualização #${currentUpdateId}`);
 
-       // Filtrar tabela com base na busca
-       document.getElementById('search').addEventListener('input', (event) => {
-           const searchTerm = event.target.value.toLowerCase();
+                        // MANTER APENAS OS DADOS DA ÚLTIMA ATUALIZAÇÃO COMPLETA
+                        allBusesData = [...currentUpdateBusesData];
 
-           if (!searchTerm) {
-               filteredBusesData = [...allBusesData];
-           } else {
-               filteredBusesData = allBusesData.filter(bus =>
-                   (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
-                   (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
-               );
-           }
+                        // ATUALIZAR OS DADOS FILTRADOS com base na busca atual
+                        const searchTerm = document.getElementById('search').value.toLowerCase();
+                        if (!searchTerm) {
+                            filteredBusesData = [...allBusesData];
+                        } else {
+                            filteredBusesData = allBusesData.filter(bus =>
+                                (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
+                                (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
+                            );
+                        }
 
-           currentPage = 1;
-           updateStats();
-           renderTable();
-       });
+                        // Atualizar interface
+                        updateStats();
+                        renderTable();
 
-       // Navegação de páginas
-       document.getElementById('next-page').addEventListener('click', () => {
-           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-           if (currentPage < totalPages) {
-               currentPage++;
-               renderTable();
-           }
-       });
+                        // Atualizar mapa apenas se estiver visível
+                        if (showMap) {
+                            updateMapMarkers(showingAllBuses);
+                        }
 
-       document.getElementById('prev-page').addEventListener('click', () => {
-           if (currentPage > 1) {
-               currentPage--;
-               renderTable();
-           }
-       });
+                        document.getElementById('last-update-time').textContent =
+                            `Última atualização: ${new Date().toLocaleTimeString()}`;
+                    }
 
-       document.getElementById('next-page-bottom').addEventListener('click', () => {
-           const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-           if (currentPage < totalPages) {
-               currentPage++;
-               renderTable();
-           }
-       });
+                } else if (Array.isArray(message)) {
+                    console.log('Recebidos', message.length, 'registros (formato antigo)');
+                    // Formato antigo: tratar como atualização completa
+                    allBusesData = [...message];
+                    filteredBusesData = [...allBusesData];
+                    updateStats();
+                    renderTable();
 
-       document.getElementById('prev-page-bottom').addEventListener('click', () => {
-           if (currentPage > 1) {
-               currentPage--;
-               renderTable();
-           }
-       });
+                    // Atualizar mapa apenas se estiver visível
+                    if (showMap) {
+                        updateMapMarkers(showingAllBuses);
+                    }
 
-       // Iniciar conexão quando a página carregar
-       window.onload = connectWebSocket;
+                    document.getElementById('last-update-time').textContent =
+                        `Última atualização: ${new Date().toLocaleTimeString()} `;
+                } else {
+                    console.error('Formato de mensagem desconhecido:', message);
+                }
+
+            } catch (error) {
+                console.error('Erro ao processar dados:', error);
+            }
+        };
+
+        ws.onclose = () => {
+            console.log('Conexão WebSocket fechada');
+            document.getElementById('connection-status').textContent = 'Desconectado';
+            document.getElementById('connection-status').className = 'status-disconnected';
+            document.getElementById('last-update-time').textContent = 'Desconectado - tentando reconectar...';
+
+            setTimeout(connectWebSocket, 5000);
+        };
+
+        ws.onerror = (error) => {
+            console.error('Erro WebSocket:', error);
+            document.getElementById('connection-status').textContent = 'Erro';
+            document.getElementById('connection-status').className = 'status-disconnected';
+        };
+    };
+
+    // Atualizar a tabela com os dados recebidos
+    const renderTable = () => {
+        const tableBody = document.getElementById('buses-body');
+
+        if (filteredBusesData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Nenhum ônibus encontrado</td></tr>';
+            return;
+        }
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, filteredBusesData.length);
+        const pageData = filteredBusesData.slice(startIndex, endIndex);
+
+        let tableHtml = '';
+        pageData.forEach(bus => {
+            tableHtml += `
+                <tr>
+                    <td>${bus.ordem || 'N/A'}</td>
+                    <td>${bus.linha || 'N/A'}</td>
+                    <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
+                    <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
+                    <td>${bus.velocidade || '0'}</td>
+                    <td>${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}</td>
+                </tr>
+            `;
+        });
+
+        tableBody.innerHTML = tableHtml;
+        updatePagination();
+    };
+
+    // Atualizar estatísticas
+    const updateStats = () => {
+        document.getElementById('total-buses').textContent = allBusesData.length;
+        document.getElementById('visible-buses').textContent = filteredBusesData.length;
+    };
+
+    // Atualizar controles de paginação
+    const updatePagination = () => {
+        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+        const pageInfo = `Página ${currentPage} de ${totalPages}`;
+
+        document.getElementById('page-info').textContent = pageInfo;
+        document.getElementById('page-info-bottom').textContent = pageInfo;
+
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('prev-page-bottom').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === totalPages || totalPages === 0;
+        document.getElementById('next-page-bottom').disabled = currentPage === totalPages || totalPages === 0;
+    };
+
+    // Função para ordenar a tabela
+    const sortTable = (columnIndex) => {
+        if (currentSortColumn === columnIndex) {
+            sortDirection *= -1;
+        } else {
+            currentSortColumn = columnIndex;
+            sortDirection = 1;
+        }
+
+        filteredBusesData.sort((a, b) => {
+            let valueA, valueB;
+
+            switch (columnIndex) {
+                case 0: valueA = a.ordem; valueB = b.ordem; break;
+                case 1: valueA = a.linha; valueB = b.linha; break;
+                case 2: valueA = a.latitude; valueB = b.latitude; break;
+                case 3: valueA = a.longitude; valueB = b.longitude; break;
+                case 4: valueA = a.velocidade; valueB = b.velocidade; break;
+                case 5: valueA = new Date(a.datahoraservidor); valueB = new Date(b.datahoraservidor); break;
+                default: return 0;
+            }
+
+            if (valueA < valueB) return -1 * sortDirection;
+            if (valueA > valueB) return 1 * sortDirection;
+            return 0;
+        });
+
+        currentPage = 1;
+        renderTable();
+
+        // Atualizar mapa apenas se estiver visível e não estiver mostrando todos
+        if (showMap && !showingAllBuses) {
+            updateMapMarkers(false);
+        }
+    };
+
+    // Filtrar tabela com base na busca
+    const performSearch = () => {
+        const searchTerm = document.getElementById('search').value.toLowerCase();
+
+        if (!searchTerm) {
+            filteredBusesData = [...allBusesData];
+        } else {
+            filteredBusesData = allBusesData.filter(bus =>
+                (bus.ordem && bus.ordem.toLowerCase().includes(searchTerm)) ||
+                (bus.linha && bus.linha.toLowerCase().includes(searchTerm))
+            );
+        }
+
+        currentPage = 1;
+        updateStats();
+        renderTable();
+
+        // Se estiver mostrando o mapa, atualizar com os resultados da busca
+        if (showMap) {
+            showingAllBuses = false;
+            updateMapMarkers(false);
+        }
+    };
+
+    // Iniciar busca e mostrar mapa
+    document.getElementById('search-map-btn').addEventListener('click', () => {
+        performSearch();
+        toggleMapVisibility(true);
+    });
+
+    // Permitir busca ao pressionar Enter
+    document.getElementById('search').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            performSearch();
+            toggleMapVisibility(true);
+        }
+    });
+
+    // Mostrar todos os ônibus no mapa
+    document.getElementById('show-all-btn').addEventListener('click', () => {
+        if (showingAllBuses) {
+            // Se já está mostrando todos, voltar para a visualização de busca
+            showingAllBuses = false;
+            updateMapMarkers(false);
+        } else {
+            // Mostrar todos os ônibus no mapa
+            showingAllBuses = true;
+            updateMapMarkers(true);
+        }
+    });
+
+    // Navegação de páginas
+    document.getElementById('next-page').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+        }
+    });
+
+    document.getElementById('prev-page').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
+
+    document.getElementById('next-page-bottom').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+        }
+    });
+
+    document.getElementById('prev-page-bottom').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
+
+    // Alternar visibilidade do mapa
+    document.getElementById('toggle-map').addEventListener('click', () => {
+        toggleMapVisibility(!showMap);
+    });
+
+    // Iniciar conexão quando a página carregar
+    window.onload = connectWebSocket;
 </script>
 </body>
 </html>

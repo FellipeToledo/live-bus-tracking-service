@@ -61,13 +61,13 @@ public class GpsPollingService {
 
     }
 
-    @Scheduled(fixedDelay = 25000)
+    @Scheduled(fixedDelay = 60000)
     public void checkForUpdates() {
         pollingTimer.record(() -> {
             System.out.println("Method checkForUpdates executed in: " + LocalDateTime.now());
             try {
                 LocalDateTime dataFinal = LocalDateTime.now();
-                LocalDateTime dataInicial = dataFinal.minusMinutes(20);
+                LocalDateTime dataInicial = dataFinal.minusMinutes(2);
 
                 String dataInicialStr = DateUtils.format(dataInicial);
                 String dataFinalStr = DateUtils.format(dataFinal);

@@ -64,6 +64,14 @@ Para receber atualizações em tempo real, conecte-se ao endpoint WebSocket:
 ws://localhost:8080/gps-updates
 ```
 
+### Template
+
+Template HTML simples que se conecta ao WebSocket do serviço e exibe os dados dos ônibus em tempo real:
+
+```
+http://localhost:8080/bus-tracking.html
+```
+
 ## Arquitetura Atual
 
 O serviço segue uma arquitetura simples com os seguintes componentes:
