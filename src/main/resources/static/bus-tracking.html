@@ -305,6 +305,7 @@
     let showMap = false;
     let mapInitialized = false;
     let showingAllBuses = false;
+    let currentMapView = null; // Para armazenar a visualização atual do mapa
 
     // Inicializar o mapa
     const initMap = () => {
@@ -319,11 +320,34 @@
         }).addTo(map);
 
         mapInitialized = true;
+
+        // Salvar a visualização inicial
+        saveMapView();
+    };
+
+    // Salvar a visualização atual do mapa
+    const saveMapView = () => {
+        if (!mapInitialized) return;
+        currentMapView = {
+            center: map.getCenter(),
+            zoom: map.getZoom()
+        };
+    };
+
+    // Restaurar a visualização salva do mapa
+    const restoreMapView = () => {
+        if (!mapInitialized || !currentMapView) return;
+        map.setView(currentMapView.center, currentMapView.zoom);
     };
 
     // Atualizar marcadores no mapa
     const updateMapMarkers = (showAll = false) => {
         if (!mapInitialized) return;
+
+        // Salvar a visualização atual antes de atualizar
+        const currentCenter = map.getCenter();
+        const currentZoom = map.getZoom();
+        const userInteracting = map._moving; // Verificar se o usuário está interagindo com o mapa
 
         // Limpar marcadores antigos
         Object.values(busMarkers).forEach(marker => {
@@ -383,11 +407,22 @@
 
         document.getElementById('map-buses-count').textContent = totalText;
 
-        // Ajustar visualização do mapa se houver marcadores
-        if (totalBuses > 0) {
+        // Manter a visualização atual se o usuário estava interagindo com o mapa
+        // Apenas ajustar a visualização se for a primeira vez ou se o usuário não estava interagindo
+        if (!userInteracting && totalBuses > 0) {
             const group = new L.featureGroup(Object.values(busMarkers));
-            map.fitBounds(group.getBounds().pad(0.1));
+
+            // Se é a primeira vez carregando o mapa ou não há visualização salva
+            if (!currentMapView || currentZoom === 12) {
+                map.fitBounds(group.getBounds().pad(0.1));
+            } else {
+                // Restaurar a visualização anterior
+                map.setView(currentCenter, currentZoom);
+            }
         }
+
+        // Salvar a visualização atual para futuras atualizações
+        saveMapView();
     };
 
     // Mostrar ou esconder o mapa
