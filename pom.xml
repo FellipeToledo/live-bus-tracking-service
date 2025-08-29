@@ -12,7 +12,10 @@
 	<artifactId>live-bus-tracking-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Live Bus Tracking Service</name>
-	<description>Serviço responsável por coletar dados de GPS de ônibus em tempo real, aplicar regras de negócio e notificar clientes via WebSocket</description>
+	<description>
+        Service responsible for collecting real-time GPS data from buses,
+        applying business rules, and notifying customers via WebSocket.
+    </description>
 	<url/>
 	<licenses>
 		<license/>

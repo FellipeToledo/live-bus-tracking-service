@@ -1,6 +1,22 @@
 gps:
   endpoint: https://dados.mobilidade.rio/gps/sppo
   batch-size: 10
+
+# logging
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    com.azvtech: DEBUG
+    org.springframework.web: INFO
+    org.springframework.scheduling: INFO
+  file:
+    name: logs/app.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+
 management:
   endpoints:
     web:

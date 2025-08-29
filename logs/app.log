@@ -1,0 +1,94 @@
+2025-08-29T15:18:42.689-03:00  INFO [,,] 22344 --- [main] c.a.l.LiveBusTrackingServiceApplication  : Starting LiveBusTrackingServiceApplication using Java 21.0.6 with PID 22344 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-08-29T15:18:42.691-03:00 DEBUG [,,] 22344 --- [main] c.a.l.LiveBusTrackingServiceApplication  : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-08-29T15:18:42.692-03:00  INFO [,,] 22344 --- [main] c.a.l.LiveBusTrackingServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-08-29T15:18:43.624-03:00  INFO [,,] 22344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-29T15:18:43.640-03:00  INFO [,,] 22344 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-29T15:18:43.641-03:00  INFO [,,] 22344 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-08-29T15:18:43.730-03:00  INFO [,,] 22344 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-29T15:18:43.731-03:00  INFO [,,] 22344 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1006 ms
+2025-08-29T15:18:43.844-03:00 DEBUG [,,] 22344 --- [main] c.a.l.config.MdcConfig$1                 : Filter 'mdcFilter' configured for use
+2025-08-29T15:18:44.225-03:00  INFO [,,] 22344 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-08-29T15:18:44.288-03:00  INFO [,,] 22344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-29T15:18:44.297-03:00  INFO [,,] 22344 --- [main] c.a.l.LiveBusTrackingServiceApplication  : Started LiveBusTrackingServiceApplication in 1.985 seconds (process running for 2.3)
+2025-08-29T15:18:44.303-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Starting scheduled GPS polling
+2025-08-29T15:18:44.306-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Fetching GPS data from 2025-08-29+15:16:44 to 2025-08-29+15:18:44
+2025-08-29T15:18:44.321-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-08-29+15:16:44&dataFinal=2025-08-29+15:18:44
+2025-08-29T15:18:49.687-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-29T15:18:49.687-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-29T15:18:49.688-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-08-29T15:18:49.728-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-1] c.a.l.handler.GpsWebSocketHandler        : New client connected: c8d7eca9-ee06-d823-d0bf-7f815554a063
+2025-08-29T15:19:08.831-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-2] c.a.l.handler.GpsWebSocketHandler        : Connection closed: c8d7eca9-ee06-d823-d0bf-7f815554a063 - Reason: null
+2025-08-29T15:19:09.032-03:00  INFO [,,] 22344 --- [http-nio-8080-exec-4] c.a.l.handler.GpsWebSocketHandler        : New client connected: 1ab8ef50-0a1a-11d4-c867-434a9023c2cf
+2025-08-29T15:19:42.977-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Received response with 2530388 characters
+2025-08-29T15:19:43.084-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Parsed 13200 GPS records from JSON
+2025-08-29T15:19:43.088-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Filtered 3428 unique vehicles from 13200 total records
+2025-08-29T15:19:43.090-03:00  INFO [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.handler.GpsWebSocketHandler        : Broadcasting 3428 records to 1 clients in batches of 10
+2025-08-29T15:19:43.183-03:00 DEBUG [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Broadcasted 3428 records to WebSocket clients
+2025-08-29T15:19:43.184-03:00  INFO [,c3595321-7905-4795-bafa-1889d6fe2ddb,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Polling completed: processed 3428 GPS records
+2025-08-29T15:20:43.199-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Starting scheduled GPS polling
+2025-08-29T15:20:43.200-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Fetching GPS data from 2025-08-29+15:18:43 to 2025-08-29+15:20:43
+2025-08-29T15:20:43.201-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-08-29+15:18:43&dataFinal=2025-08-29+15:20:43
+2025-08-29T15:21:32.668-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Received response with 2595306 characters
+2025-08-29T15:21:32.786-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Parsed 13540 GPS records from JSON
+2025-08-29T15:21:32.789-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Filtered 3420 unique vehicles from 13540 total records
+2025-08-29T15:21:32.790-03:00  INFO [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.handler.GpsWebSocketHandler        : Broadcasting 3420 records to 1 clients in batches of 10
+2025-08-29T15:21:32.849-03:00 DEBUG [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Broadcasted 3420 records to WebSocket clients
+2025-08-29T15:21:32.849-03:00  INFO [,d9ad1945-b5b6-41ff-a597-535bfef346d5,polling] 22344 --- [GpsPolling-1] c.a.l.service.GpsPollingService          : Polling completed: processed 3420 GPS records
+2025-08-29T15:21:56.429-03:00  INFO [,,] 22344 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-29T15:21:56.443-03:00  INFO [,,] 22344 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-08-29T15:21:56.466-03:00 ERROR [,,] 22344 --- [SpringApplicationShutdownHook] c.a.l.handler.GpsWebSocketHandler        : Transport error in session 1ab8ef50-0a1a-11d4-c867-434a9023c2cf: java.nio.channels.ClosedChannelException
+
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlockInternal(WsRemoteEndpointImplBase.java:326) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:266) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:792) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:589) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:556) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:544) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1024) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4052) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:4662) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:235) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1219) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1208) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:814) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:235) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1219) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1208) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:814) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:235) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:471) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:235) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:915) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:235) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:447) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:301) ~[spring-boot-3.4.2.jar:3.4.2]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:374) ~[spring-boot-3.4.2.jar:3.4.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177) ~[spring-boot-3.4.2.jar:3.4.2]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.2.jar:6.2.2]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.4.2.jar:3.4.2]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.4.2.jar:3.4.2]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:273) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1632) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337) ~[tomcat-embed-core-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:171) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:521) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlockInternal(WsRemoteEndpointImplBase.java:313) ~[tomcat-embed-websocket-10.1.34.jar:10.1.34]
+	... 37 common frames omitted
+
+2025-08-29T15:21:56.473-03:00 ERROR [,,] 22344 --- [SpringApplicationShutdownHook] c.a.l.handler.GpsWebSocketHandler        : Failed to send error message to session 1ab8ef50-0a1a-11d4-c867-434a9023c2cf: The transformer has been closed and may no longer be used
+2025-08-29T15:22:01.481-03:00  INFO [,,] 22344 --- [SpringApplicationShutdownHook] c.a.l.handler.GpsWebSocketHandler        : Attempting to reconnect session: 1ab8ef50-0a1a-11d4-c867-434a9023c2cf
+2025-08-29T15:22:01.483-03:00  INFO [,,] 22344 --- [SpringApplicationShutdownHook] c.a.l.handler.GpsWebSocketHandler        : Connection closed: 1ab8ef50-0a1a-11d4-c867-434a9023c2cf - Reason: The web application is stopping

@@ -1,0 +1,75 @@
+2025-08-29 15:21:24.064 [background-preinit] INFO  [null] o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-29 15:21:24.111 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Starting LiveBusTrackingServiceApplication using Java 21.0.8 with PID 25164 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-08-29 15:21:24.113 [main] DEBUG [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-08-29 15:21:24.114 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-08-29 15:21:25.548 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+2025-08-29 15:21:25.566 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2025-08-29 15:21:25.570 [main] INFO  [null] o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2025-08-29 15:21:25.571 [main] INFO  [null] o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-08-29 15:21:25.655 [main] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2025-08-29 15:21:25.656 [main] INFO  [null] o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1485 ms
+2025-08-29 15:21:25.920 [main] DEBUG [null] c.a.l.config.MdcConfig$1.init - Filter 'mdcFilter' configured for use
+2025-08-29 15:21:26.657 [main] INFO  [null] o.s.b.a.e.web.EndpointLinksResolver.<init> - Exposing 3 endpoints beneath base path '/actuator'
+2025-08-29 15:21:26.724 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2025-08-29 15:21:26.733 [main] WARN  [null] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-29 15:21:26.753 [main] INFO  [null] o.s.b.a.l.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-29 15:21:26.772 [main] ERROR [null] o.s.b.d.LoggingFailureAnalysisReporter.report - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-29 15:22:16.864 [background-preinit] INFO  [null] o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-29 15:22:16.905 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Starting LiveBusTrackingServiceApplication using Java 21.0.6 with PID 8608 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-08-29 15:22:16.906 [main] DEBUG [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-08-29 15:22:16.906 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-08-29 15:22:18.130 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+2025-08-29 15:22:18.142 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2025-08-29 15:22:18.144 [main] INFO  [null] o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2025-08-29 15:22:18.145 [main] INFO  [null] o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-08-29 15:22:18.209 [main] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2025-08-29 15:22:18.211 [main] INFO  [null] o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1264 ms
+2025-08-29 15:22:18.371 [main] DEBUG [null] c.a.l.config.MdcConfig$1.init - Filter 'mdcFilter' configured for use
+2025-08-29 15:22:18.893 [main] INFO  [null] o.s.b.a.e.web.EndpointLinksResolver.<init> - Exposing 3 endpoints beneath base path '/actuator'
+2025-08-29 15:22:18.951 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2025-08-29 15:22:18.996 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+2025-08-29 15:22:19.014 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarted - Started LiveBusTrackingServiceApplication in 2.527 seconds (process running for 2.802)
+2025-08-29 15:22:19.020 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-08-29 15:22:19.024 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-08-29+15:20:19 to 2025-08-29+15:22:19
+2025-08-29 15:22:19.041 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-08-29+15:20:19&dataFinal=2025-08-29+15:22:19
+2025-08-29 15:22:19.227 [http-nio-8080-exec-1] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-29 15:22:19.228 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+2025-08-29 15:22:19.229 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 1 ms
+2025-08-29 15:22:19.275 [http-nio-8080-exec-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 75058a1c-5a20-45b6-08bd-3504bcd488b7
+2025-08-29 15:22:28.874 [http-nio-8080-exec-5] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionClosed - Connection closed: 75058a1c-5a20-45b6-08bd-3504bcd488b7 - Reason: null
+2025-08-29 15:22:29.039 [http-nio-8080-exec-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 1010f7d0-bcff-efd7-3ebb-40bc57871075
+2025-08-29 15:23:25.406 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 2614546 characters
+2025-08-29 15:23:25.509 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 13639 GPS records from JSON
+2025-08-29 15:23:25.512 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3440 unique vehicles from 13639 total records
+2025-08-29 15:23:25.513 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3440 records to 1 clients in batches of 10
+2025-08-29 15:23:25.611 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3440 records to WebSocket clients
+2025-08-29 15:23:25.612 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3440 GPS records
+2025-08-29 15:24:25.622 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-08-29 15:24:25.622 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-08-29+15:22:25 to 2025-08-29+15:24:25
+2025-08-29 15:24:25.623 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-08-29+15:22:25&dataFinal=2025-08-29+15:24:25
+2025-08-29 15:25:25.569 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 2549587 characters
+2025-08-29 15:25:25.629 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 13299 GPS records from JSON
+2025-08-29 15:25:25.634 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3422 unique vehicles from 13299 total records
+2025-08-29 15:25:25.636 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3422 records to 1 clients in batches of 10
+2025-08-29 15:25:25.694 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3422 records to WebSocket clients
+2025-08-29 15:25:25.695 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3422 GPS records
+2025-08-29 15:26:25.712 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-08-29 15:26:25.717 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-08-29+15:24:25 to 2025-08-29+15:26:25
+2025-08-29 15:26:25.719 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-08-29+15:24:25&dataFinal=2025-08-29+15:26:25
+2025-08-29 15:26:57.044 [SpringApplicationShutdownHook] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.shutDownGracefully - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-29 15:26:57.061 [tomcat-shutdown] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.doShutdown - Graceful shutdown complete
