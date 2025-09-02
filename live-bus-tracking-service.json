@@ -1,0 +1,275 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Live Bus Tracking Service",
+    "tags": ["bus", "tracking", "gps", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "GPS Data Processing Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(gps_data_processed_total[5m])",
+            "legendFormat": "Records processed per second",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "rec/sec"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "HTTP Requests to External API",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(gps_http_requests_total[5m])",
+            "legendFormat": "Requests per minute",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "req/min"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Polling Execution Time",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(gps_polling_timer_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(gps_polling_timer_seconds_bucket[5m]))",
+            "legendFormat": "50th percentile",
+            "refId": "B"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "API Response Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(gps_api_response_time_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(gps_api_response_time_seconds_bucket[5m]))",
+            "legendFormat": "50th percentile",
+            "refId": "B"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Batch Size Distribution",
+        "type": "bargauge",
+        "targets": [
+          {
+            "expr": "gps_batch_size_records",
+            "legendFormat": "Current batch size",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 16},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "rec"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Errors Count",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "gps_errors_total",
+            "legendFormat": "Total errors",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 16},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "red", "value": 1}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "WebSocket Connections",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "count(http_server_requests_seconds_count{uri=\"/gps-updates\"})",
+            "legendFormat": "Active connections",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 16},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "none"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "JVM Memory Usage",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "jvm_memory_used_bytes{area=\"heap\"} / jvm_memory_max_bytes{area=\"heap\"} * 100",
+            "legendFormat": "Heap memory usage",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 70},
+                {"color": "red", "value": 90}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "System CPU Usage",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "system_cpu_usage * 100",
+            "legendFormat": "CPU usage",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 70},
+                {"color": "red", "value": 90}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "Log Messages by Level",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "logback_events_total",
+            "legendFormat": "{{level}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "Thread Pool Metrics",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "executor_pool_size_threads",
+            "legendFormat": "Pool size",
+            "refId": "A"
+          },
+          {
+            "expr": "executor_active_threads",
+            "legendFormat": "Active threads",
+            "refId": "B"
+          },
+          {
+            "expr": "executor_queued_tasks",
+            "legendFormat": "Queued tasks",
+            "refId": "C"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "templating": {
+      "list": [
+        {
+          "name": "interval",
+          "type": "interval",
+          "query": "1m,5m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+          "current": {
+            "value": "5m",
+            "text": "5m"
+          }
+        }
+      ]
+    },
+    "refresh": "30s"
+  }
+}

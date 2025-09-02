@@ -55,6 +55,13 @@ mvn clean package
 ```bash
 java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
 ```
+### Prometheus
+```bash
+/Downloads/prometheus-3.6.0-rc.0.windows-amd64/prometheus-3.6.0-rc.0.windows-amd64
+
+java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
+```
+
 
 ### Conexão WebSocket
 

@@ -23,13 +23,5 @@ management:
       exposure:
         include: prometheus,health,metrics
   endpoint:
-    prometheus:
-      enabled: 'true'
-      health:
-        show-details: always
-    metrics:
-        enabled: 'true'
-  metrics:
-        export:
-          prometheus:
-            enabled: 'true'
+    health:
+      show-details: ALWAYS

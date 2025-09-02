@@ -9,6 +9,7 @@
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
     <style>
+        /* Estilos existentes (mantidos) */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -280,6 +281,53 @@
         .autocomplete-suggestion:last-child {
             border-bottom: none;
         }
+
+        /* Novos estilos para controles de itinerário */
+        .itinerary-route {
+            stroke-width: 4;
+            stroke-opacity: 0.8;
+        }
+
+        .itinerary-route-ida {
+            stroke: #007bff; /* Azul para ida */
+        }
+
+        .itinerary-route-volta {
+            stroke: #ff0000; /* Vermelho sólido para volta */
+        }
+        .itinerary-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .itinerary-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 120px;
+        }
+        .itinerary-btn {
+            padding: 8px 15px;
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .itinerary-btn:hover {
+            background-color: #8e44ad;
+        }
+        .itinerary-btn.active {
+            background-color: #7d3c98;
+        }
+        .itinerary-info {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+
         @media (max-width: 768px) {
             .map-controls {
                 flex-direction: column;
@@ -290,6 +338,10 @@
             }
             .address-search {
                 flex-direction: column;
+            }
+            .itinerary-controls {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -367,6 +419,21 @@
             <button id="search-address-btn">Buscar Endereço</button>
         </div>
 
+        <!-- Controles para itinerários -->
+        <div class="itinerary-controls">
+            <label for="itinerary-direction-select">Direção:</label>
+            <select id="itinerary-direction-select" class="itinerary-select">
+                <option value="0">Volta</option>
+                <option value="1">Ida</option>
+                <option value="both">Ambas</option>
+            </select>
+
+            <button id="show-itinerary-btn" class="itinerary-btn">Mostrar Itinerário da Linha Filtrada</button>
+            <button id="hide-itinerary-btn" class="itinerary-btn">Ocultar Itinerário</button>
+
+            <span id="itinerary-info" class="itinerary-info"></span>
+        </div>
+
         <div class="map-controls">
             <div class="map-buttons">
                 <button id="toggle-map" class="map-toggle">Ocultar Mapa</button>
@@ -406,6 +473,10 @@
     let currentMapView = null; // Para armazenar a visualização atual do mapa
     let addressMarker = null; // Marcador para o endereço pesquisado
     let autocompleteTimeout = null;
+
+    // Variáveis para itinerários
+    let itineraryData = null; // Armazenará todos os dados de itinerário
+    let currentItineraryLines = {}; // Armazenará as linhas de itinerário atualmente exibidas
 
     // Inicializar o mapa
     const initMap = () => {
@@ -627,6 +698,170 @@
         }
 
         showMap = visible;
+    };
+
+    // Carregar dados de itinerário da API
+    const loadItineraryData = async () => {
+        try {
+            console.log('Carregando dados de itinerário...');
+            const response = await fetch('https://pgeo3.rio.rj.gov.br/arcgis/rest/services/Hosted/Itiner%C3%A1rios_da_rede_de_transporte_p%C3%BAblico_por_%C3%B4nibus_(SPPO)/FeatureServer/1/query?outFields=*&where=1%3D1&f=geojson');
+            itineraryData = await response.json();
+            console.log('Dados de itinerário carregados:', itineraryData);
+
+            document.getElementById('itinerary-info').textContent = 'Dados de itinerário carregados';
+        } catch (error) {
+            console.error('Erro ao carregar dados de itinerário:', error);
+            document.getElementById('itinerary-info').textContent = 'Erro ao carregar itinerários';
+        }
+    };
+
+    // Preencher o seletor de linhas com as opções disponíveis
+    const populateLineSelector = () => {
+        if (!itineraryData || !itineraryData.features) return;
+
+        const lineSelect = document.getElementById('itinerary-line-select');
+        const lines = new Set();
+
+        // Coletar todas as linhas únicas
+        itineraryData.features.forEach(feature => {
+            if (feature.properties && feature.properties.servico) {
+                lines.add(feature.properties.servico);
+            }
+        });
+
+        // Ordenar as linhas numericamente
+        const sortedLines = Array.from(lines).sort((a, b) => parseInt(a) - parseInt(b));
+
+        // Adicionar opções ao seletor
+        sortedLines.forEach(line => {
+            const option = document.createElement('option');
+            option.value = line;
+            option.textContent = line;
+            lineSelect.appendChild(option);
+        });
+
+        document.getElementById('itinerary-info').textContent = `${sortedLines.length} linhas carregadas`;
+    };
+
+    // Obter a linha selecionada no filtro
+    const getSelectedLineFromFilter = () => {
+        return document.getElementById('search-line').value.trim();
+    };
+
+    // Mostrar itinerário no mapa
+    const showItinerary = () => {
+        const selectedLine = getSelectedLineFromFilter();
+        const selectedDirection = document.getElementById('itinerary-direction-select').value;
+
+        if (!selectedLine) {
+            alert('Por favor, digite uma linha no filtro "Filtrar por Linha" primeiro.');
+            return;
+        }
+
+        if (!itineraryData || !itineraryData.features) {
+            alert('Dados de itinerário não carregados. Tente novamente em alguns instantes.');
+            return;
+        }
+
+        // Limpar itinerários anteriores
+        hideItinerary();
+
+        // Filtrar features pela linha selecionada
+        const lineFeatures = itineraryData.features.filter(feature =>
+            feature.properties && feature.properties.servico === selectedLine
+        );
+
+        if (lineFeatures.length === 0) {
+            document.getElementById('itinerary-info').textContent = 'Nenhum itinerário encontrado para esta linha';
+            return;
+        }
+
+        // Filtrar por direção se necessário
+        let featuresToShow = [];
+        if (selectedDirection === 'both') {
+            featuresToShow = lineFeatures;
+        } else {
+            const direction = parseInt(selectedDirection);
+            featuresToShow = lineFeatures.filter(feature =>
+                feature.properties && feature.properties.direcao === direction
+            );
+        }
+
+        if (featuresToShow.length === 0) {
+            const directionName = selectedDirection === '0' ? 'volta' : 'ida';
+            document.getElementById('itinerary-info').textContent = `Nenhum itinerário de ${directionName} encontrado`;
+            return;
+        }
+
+        // Adicionar cada itinerário ao mapa
+        featuresToShow.forEach(feature => {
+            if (feature.geometry && feature.geometry.coordinates) {
+                // Converter coordenadas para o formato [lat, lng] que o Leaflet espera
+                const latLngs = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+
+                // Criar uma polilinha com estilos diferentes para ida e volta
+                const color = feature.properties.direcao === 1 ? '#007bff' : '#ff0000'; // Azul para ida, Vermelho para volta
+                const weight = feature.properties.direcao === 1 ? 4 : 4;
+                const opacity = feature.properties.direcao === 1 ? 0.7 : 0.8;
+                const dashArray = null; // Sólido para ambas as direções (remover o tracejado)
+
+                const polyline = L.polyline(latLngs, {
+                    color: color,
+                    weight: weight,
+                    opacity: opacity,
+                    dashArray: dashArray
+                }).addTo(map);
+
+                // Adicionar popup com informações
+                const directionName = feature.properties.direcao === 1 ? 'IDA' : 'VOLTA';
+                polyline.bindPopup(`
+                    <strong>Linha ${feature.properties.servico}</strong><br>
+                    Direção: ${directionName}<br>
+                    Destino: ${feature.properties.destino || 'N/A'}<br>
+                    Consórcio: ${feature.properties.consorcio || 'N/A'}
+                `);
+
+                // Armazenar referência para remoção posterior
+                const key = `${feature.properties.servico}_${feature.properties.direcao}`;
+                if (!currentItineraryLines[key]) {
+                    currentItineraryLines[key] = [];
+                }
+                currentItineraryLines[key].push(polyline);
+            }
+        });
+
+        // Ajustar a visualização do mapa para mostrar todos os itinerários
+        const bounds = new L.LatLngBounds();
+        featuresToShow.forEach(feature => {
+            if (feature.geometry && feature.geometry.coordinates) {
+                feature.geometry.coordinates.forEach(coord => {
+                    bounds.extend([coord[1], coord[0]]);
+                });
+            }
+        });
+
+        if (bounds.isValid()) {
+            map.fitBounds(bounds.pad(0.1));
+        }
+
+        // Atualizar informação
+        const directionText = selectedDirection === 'both' ? 'idas e voltas' :
+                            (selectedDirection === '1' ? 'ida' : 'volta');
+        document.getElementById('itinerary-info').textContent =
+            `Itinerário(s) da linha ${selectedLine} (${directionText}) exibido(s)`;
+    };
+
+    // Ocultar itinerários do mapa
+    const hideItinerary = () => {
+        // Remover todas as polilinhas de itinerário
+        Object.values(currentItineraryLines).forEach(lines => {
+            lines.forEach(line => {
+                map.removeLayer(line);
+            });
+        });
+        currentItineraryLines = {};
+
+        document.getElementById('itinerary-info').textContent = 'Itinerário oculto';
     };
 
     // Conectar ao WebSocket
@@ -985,8 +1220,17 @@
         toggleMapVisibility(!showMap);
     });
 
+    // Mostrar itinerário
+    document.getElementById('show-itinerary-btn').addEventListener('click', showItinerary);
+
+    // Ocultar itinerário
+    document.getElementById('hide-itinerary-btn').addEventListener('click', hideItinerary);
+
     // Iniciar conexão quando a página carregar
-    window.onload = connectWebSocket;
+    window.onload = function() {
+        connectWebSocket();
+        loadItineraryData(); // Carregar dados de itinerário
+    };
 </script>
 </body>
 </html>
