@@ -511,80 +511,146 @@
         map.setView(currentMapView.center, currentMapView.zoom);
     };
 
-    // Buscar sugestões de endereço usando Nominatim
-    const fetchAddressSuggestions = async (query) => {
-        if (!query || query.length < 3) {
-            document.getElementById('autocomplete-suggestions').style.display = 'none';
-            return;
-        }
+    // Função para formatar o endereço extraindo apenas as partes relevantes
+const formatAddress = (displayName) => {
+    // Dividir o endereço por vírgulas
+    const parts = displayName.split(',');
 
-        try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
-            const data = await response.json();
+    // Manter apenas os primeiros elementos (rua, bairro, cidade)
+    if (parts.length >= 3) {
+        // Juntar os três primeiros componentes
+        return `${parts[0].trim()}, ${parts[1].trim()}, ${parts[2].trim()}`;
+    }
 
-            const suggestionsContainer = document.getElementById('autocomplete-suggestions');
-            suggestionsContainer.innerHTML = '';
+    // Se não tiver pelo menos 3 partes, retornar o original
+    return displayName;
+};
 
-            if (data && data.length > 0) {
-                data.forEach(item => {
-                    const suggestion = document.createElement('div');
-                    suggestion.className = 'autocomplete-suggestion';
-                    suggestion.textContent = item.display_name;
-                    suggestion.addEventListener('click', () => {
-                        document.getElementById('search-address').value = item.display_name;
-                        suggestionsContainer.style.display = 'none';
-                        searchAddress(item.display_name);
-                    });
-                    suggestionsContainer.appendChild(suggestion);
+
+   // Buscar sugestões de endereço usando Nominatim com filtro para Rio de Janeiro
+const fetchAddressSuggestions = async (query) => {
+    if (!query || query.length < 3) {
+        document.getElementById('autocomplete-suggestions').style.display = 'none';
+        return;
+    }
+
+    try {
+        // Parâmetros para restringir a busca ao Rio de Janeiro
+        const viewbox = '-43.8,-23.1,-43.1,-22.8'; // Coordenadas aproximadas do RJ (ajustadas)
+        const bounded = 1; // Forçar resultados dentro da área
+        const countrycodes = 'br'; // Código do país (Brasil)
+
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}` +
+            `&limit=5&countrycodes=${countrycodes}&bounded=${bounded}&viewbox=${viewbox}`
+        );
+        const data = await response.json();
+
+        const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+        suggestionsContainer.innerHTML = '';
+
+        if (data && data.length > 0) {
+            data.forEach(item => {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'autocomplete-suggestion';
+
+                // Formatar o endereço para exibição (apenas partes relevantes)
+                const displayText = formatAddress(item.display_name);
+                suggestion.textContent = displayText;
+
+                // Armazenar o endereço completo em um atributo de dados
+                suggestion.setAttribute('data-full-address', item.display_name);
+
+                suggestion.addEventListener('click', () => {
+                    // Usar o endereço completo armazenado
+                    const fullAddress = suggestion.getAttribute('data-full-address');
+                    document.getElementById('search-address').value = displayText;
+                    suggestionsContainer.style.display = 'none';
+                    searchAddress(fullAddress, item.lat, item.lon);
                 });
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Erro ao buscar sugestões:', error);
-            document.getElementById('autocomplete-suggestions').style.display = 'none';
+
+                suggestionsContainer.appendChild(suggestion);
+            });
+            suggestionsContainer.style.display = 'block';
+        } else {
+            suggestionsContainer.style.display = 'none';
+
+            // Mostrar mensagem indicando que não foram encontrados resultados no RJ
+            const noResultsMsg = document.createElement('div');
+            noResultsMsg.className = 'autocomplete-suggestion';
+            noResultsMsg.textContent = 'Nenhum endereço encontrado no Rio de Janeiro';
+            noResultsMsg.style.color = '#999';
+            noResultsMsg.style.cursor = 'default';
+            suggestionsContainer.appendChild(noResultsMsg);
+            suggestionsContainer.style.display = 'block';
         }
-    };
+    } catch (error) {
+        console.error('Erro ao buscar sugestões:', error);
+        document.getElementById('autocomplete-suggestions').style.display = 'none';
+    }
+};
 
     // Buscar endereço usando Nominatim (OpenStreetMap)
-    const searchAddress = async (address = null) => {
-        const addressValue = address || document.getElementById('search-address').value.trim();
-        if (!addressValue) return;
+    const searchAddress = async (address = null, lat = null, lon = null) => {
+    const addressValue = address || document.getElementById('search-address').value.trim();
+    if (!addressValue) return;
 
-        try {
-            // Mostrar indicador de carregamento
-            document.getElementById('search-address-btn').textContent = 'Buscando...';
+    try {
+        // Mostrar indicador de carregamento
+        document.getElementById('search-address-btn').textContent = 'Buscando...';
 
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressValue)}&limit=1`);
+        let result;
+        if (lat && lon) {
+            // Se já temos as coordenadas (vindo do autocomplete)
+            result = { lat: parseFloat(lat), lon: parseFloat(lon), display_name: addressValue };
+        } else {
+            // Fazer uma nova busca com filtro para RJ
+            const viewbox = '-43.8,-23.1,-43.1,-22.8';
+            const bounded = 1;
+            const countrycodes = 'br';
+
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressValue)}` +
+                `&limit=1&countrycodes=${countrycodes}&bounded=${bounded}&viewbox=${viewbox}`
+            );
             const data = await response.json();
 
             if (data && data.length > 0) {
-                const result = data[0];
-                const lat = parseFloat(result.lat);
-                const lon = parseFloat(result.lon);
-
-                // Remover marcador anterior se existir
-                if (addressMarker) {
-                    map.removeLayer(addressMarker);
-                }
-
-                // Centralizar o mapa no endereço com zoom adequado
-                map.setView([lat, lon], 15);
-
-                // Salvar a visualização
-                saveMapView();
+                result = data[0];
             } else {
-                alert('Endereço não encontrado. Tente ser mais específico.');
+                alert('Endereço não encontrado no Rio de Janeiro. Tente ser mais específico ou use um endereço do RJ.');
+                return;
             }
-        } catch (error) {
-            console.error('Erro ao buscar endereço:', error);
-            alert('Erro ao buscar endereço. Tente novamente.');
-        } finally {
-            document.getElementById('search-address-btn').textContent = 'Buscar Endereço';
-            document.getElementById('autocomplete-suggestions').style.display = 'none';
         }
-    };
+
+        const latVal = parseFloat(result.lat);
+        const lonVal = parseFloat(result.lon);
+
+        // Remover marcador anterior se existir
+        if (addressMarker) {
+            map.removeLayer(addressMarker);
+        }
+
+        // Adicionar marcador para o endereço encontrado
+        addressMarker = L.marker([latVal, lonVal])
+            .addTo(map)
+            .bindPopup(`<strong>Endereço:</strong><br>${result.display_name}`)
+            .openPopup();
+
+        // Centralizar o mapa no endereço com zoom adequado
+        map.setView([latVal, lonVal], 15);
+
+        // Salvar a visualização
+        saveMapView();
+
+    } catch (error) {
+        console.error('Erro ao buscar endereço:', error);
+        alert('Erro ao buscar endereço. Tente novamente.');
+    } finally {
+        document.getElementById('search-address-btn').textContent = 'Buscar Endereço';
+        document.getElementById('autocomplete-suggestions').style.display = 'none';
+    }
+};
 
     // Atualizar marcadores no mapa
     const updateMapMarkers = (showAll = false) => {

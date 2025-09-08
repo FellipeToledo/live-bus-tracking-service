@@ -1,5 +1,5 @@
 gps:
-  endpoint: https://dados.mobilidade.rio/gps/sppo
+  endpoint: ${ENDPOINT_GPS}
   batch-size: 10
 
 # logging

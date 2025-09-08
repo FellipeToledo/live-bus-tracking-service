@@ -93,7 +93,7 @@ public class GpsPollingService {
 
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 2000)
     public void checkForUpdates() {
         // Gerar correlation ID para cada execução do polling
         String pollingId = UUID.randomUUID().toString();
@@ -105,7 +105,7 @@ public class GpsPollingService {
                 logger.debug("Starting scheduled GPS polling");
                 try {
                     LocalDateTime dataFinal = LocalDateTime.now();
-                    LocalDateTime dataInicial = dataFinal.minusMinutes(2);
+                    LocalDateTime dataInicial = dataFinal.minusSeconds(70);
 
                     String dataInicialStr = DateUtils.format(dataInicial);
                     String dataFinalStr = DateUtils.format(dataFinal);
