@@ -526,3 +526,414 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2025-09-08 09:42:14.578 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:41:04&dataFinal=2025-09-08+09:42:14
 2025-09-08 09:42:29.765 [SpringApplicationShutdownHook] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.shutDownGracefully - Commencing graceful shutdown. Waiting for active requests to complete
 2025-09-08 09:42:29.790 [tomcat-shutdown] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.doShutdown - Graceful shutdown complete
+2025-09-08 09:50:38.630 [background-preinit] INFO  [null] o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 8.0.2.Final
+2025-09-08 09:50:38.698 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Starting LiveBusTrackingServiceApplication using Java 21.0.8 with PID 25076 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-09-08 09:50:38.698 [main] DEBUG [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-09-08 09:50:38.699 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-09-08 09:50:40.294 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+2025-09-08 09:50:40.307 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2025-09-08 09:50:40.310 [main] INFO  [null] o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2025-09-08 09:50:40.311 [main] INFO  [null] o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-09-08 09:50:40.384 [main] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2025-09-08 09:50:40.385 [main] INFO  [null] o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1642 ms
+2025-09-08 09:50:40.555 [main] DEBUG [null] c.a.l.config.MdcConfig$1.init - Filter 'mdcFilter' configured for use
+2025-09-08 09:50:41.083 [main] INFO  [null] o.s.b.a.e.web.EndpointLinksResolver.<init> - Exposing 3 endpoints beneath base path '/actuator'
+2025-09-08 09:50:41.126 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2025-09-08 09:50:41.149 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+2025-09-08 09:50:41.161 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarted - Started LiveBusTrackingServiceApplication in 3.124 seconds (process running for 3.591)
+2025-09-08 09:50:41.167 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:50:41.169 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:49:31 to 2025-09-08+09:50:41
+2025-09-08 09:50:41.183 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:49:31&dataFinal=2025-09-08+09:50:41
+2025-09-08 09:50:46.470 [http-nio-8080-exec-1] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-08 09:50:46.470 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+2025-09-08 09:50:46.471 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 1 ms
+2025-09-08 09:50:46.514 [http-nio-8080-exec-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 6756cfb0-ecf9-d2ce-8676-8f97459deacf
+2025-09-08 09:50:51.644 [http-nio-8080-exec-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionClosed - Connection closed: 6756cfb0-ecf9-d2ce-8676-8f97459deacf - Reason: null
+2025-09-08 09:50:51.754 [http-nio-8080-exec-7] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 97c2f25a-46f6-f44c-79d3-afa01c30b734
+2025-09-08 09:51:20.664 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1537352 characters
+2025-09-08 09:51:20.772 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8020 GPS records from JSON
+2025-09-08 09:51:20.774 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3545 unique vehicles from 8020 total records
+2025-09-08 09:51:20.775 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3545 records to 1 clients in batches of 10
+2025-09-08 09:51:20.924 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3545 records to WebSocket clients
+2025-09-08 09:51:20.926 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3545 GPS records
+2025-09-08 09:51:22.931 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:51:22.932 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:50:12 to 2025-09-08+09:51:22
+2025-09-08 09:51:22.933 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:50:12&dataFinal=2025-09-08+09:51:22
+2025-09-08 09:51:52.353 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1466871 characters
+2025-09-08 09:51:52.373 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7651 GPS records from JSON
+2025-09-08 09:51:52.375 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3532 unique vehicles from 7651 total records
+2025-09-08 09:51:52.377 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3532 records to 1 clients in batches of 10
+2025-09-08 09:51:52.456 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3532 records to WebSocket clients
+2025-09-08 09:51:52.457 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3532 GPS records
+2025-09-08 09:51:54.473 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:51:54.473 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:50:44 to 2025-09-08+09:51:54
+2025-09-08 09:51:54.474 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:50:44&dataFinal=2025-09-08+09:51:54
+2025-09-08 09:52:27.059 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1513857 characters
+2025-09-08 09:52:27.089 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7897 GPS records from JSON
+2025-09-08 09:52:27.092 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3537 unique vehicles from 7897 total records
+2025-09-08 09:52:27.093 [GpsPolling-2] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3537 records to 1 clients in batches of 10
+2025-09-08 09:52:27.128 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3537 records to WebSocket clients
+2025-09-08 09:52:27.128 [GpsPolling-2] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3537 GPS records
+2025-09-08 09:52:29.141 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:52:29.142 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:51:19 to 2025-09-08+09:52:29
+2025-09-08 09:52:29.143 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:51:19&dataFinal=2025-09-08+09:52:29
+2025-09-08 09:53:02.046 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1458186 characters
+2025-09-08 09:53:02.059 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7607 GPS records from JSON
+2025-09-08 09:53:02.060 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3526 unique vehicles from 7607 total records
+2025-09-08 09:53:02.061 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3526 records to 1 clients in batches of 10
+2025-09-08 09:53:02.099 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3526 records to WebSocket clients
+2025-09-08 09:53:02.100 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3526 GPS records
+2025-09-08 09:53:04.108 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:53:04.109 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:51:54 to 2025-09-08+09:53:04
+2025-09-08 09:53:04.109 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:51:54&dataFinal=2025-09-08+09:53:04
+2025-09-08 09:53:38.355 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1450576 characters
+2025-09-08 09:53:38.364 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7567 GPS records from JSON
+2025-09-08 09:53:38.365 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3517 unique vehicles from 7567 total records
+2025-09-08 09:53:38.366 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3517 records to 1 clients in batches of 10
+2025-09-08 09:53:38.408 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3517 records to WebSocket clients
+2025-09-08 09:53:38.409 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3517 GPS records
+2025-09-08 09:53:40.415 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:53:40.415 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:52:30 to 2025-09-08+09:53:40
+2025-09-08 09:53:40.416 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:52:30&dataFinal=2025-09-08+09:53:40
+2025-09-08 09:54:12.681 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1457143 characters
+2025-09-08 09:54:12.697 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7599 GPS records from JSON
+2025-09-08 09:54:12.698 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3550 unique vehicles from 7599 total records
+2025-09-08 09:54:12.699 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3550 records to 1 clients in batches of 10
+2025-09-08 09:54:12.733 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3550 records to WebSocket clients
+2025-09-08 09:54:12.733 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3550 GPS records
+2025-09-08 09:54:14.749 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:54:14.750 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:53:04 to 2025-09-08+09:54:14
+2025-09-08 09:54:14.751 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:53:04&dataFinal=2025-09-08+09:54:14
+2025-09-08 09:54:50.093 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1388599 characters
+2025-09-08 09:54:50.104 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7242 GPS records from JSON
+2025-09-08 09:54:50.105 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3530 unique vehicles from 7242 total records
+2025-09-08 09:54:50.105 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3530 records to 1 clients in batches of 10
+2025-09-08 09:54:50.141 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3530 records to WebSocket clients
+2025-09-08 09:54:50.141 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3530 GPS records
+2025-09-08 09:54:52.154 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:54:52.154 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:53:42 to 2025-09-08+09:54:52
+2025-09-08 09:54:52.154 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:53:42&dataFinal=2025-09-08+09:54:52
+2025-09-08 09:55:27.805 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1554298 characters
+2025-09-08 09:55:27.815 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8108 GPS records from JSON
+2025-09-08 09:55:27.818 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3540 unique vehicles from 8108 total records
+2025-09-08 09:55:27.819 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3540 records to 1 clients in batches of 10
+2025-09-08 09:55:27.854 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3540 records to WebSocket clients
+2025-09-08 09:55:27.855 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3540 GPS records
+2025-09-08 09:55:29.867 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:55:29.867 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:54:19 to 2025-09-08+09:55:29
+2025-09-08 09:55:29.868 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:54:19&dataFinal=2025-09-08+09:55:29
+2025-09-08 09:55:58.905 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1515015 characters
+2025-09-08 09:55:58.920 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7904 GPS records from JSON
+2025-09-08 09:55:58.923 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3547 unique vehicles from 7904 total records
+2025-09-08 09:55:58.923 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3547 records to 1 clients in batches of 10
+2025-09-08 09:55:58.960 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3547 records to WebSocket clients
+2025-09-08 09:55:58.960 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3547 GPS records
+2025-09-08 09:56:00.966 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:56:00.967 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:54:50 to 2025-09-08+09:56:00
+2025-09-08 09:56:00.968 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:54:50&dataFinal=2025-09-08+09:56:00
+2025-09-08 09:56:37.132 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1567043 characters
+2025-09-08 09:56:37.146 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8176 GPS records from JSON
+2025-09-08 09:56:37.147 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3543 unique vehicles from 8176 total records
+2025-09-08 09:56:37.147 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3543 records to 1 clients in batches of 10
+2025-09-08 09:56:37.190 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3543 records to WebSocket clients
+2025-09-08 09:56:37.190 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3543 GPS records
+2025-09-08 09:56:39.193 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:56:39.193 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:55:29 to 2025-09-08+09:56:39
+2025-09-08 09:56:39.193 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:55:29&dataFinal=2025-09-08+09:56:39
+2025-09-08 09:57:10.043 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1475355 characters
+2025-09-08 09:57:10.056 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7698 GPS records from JSON
+2025-09-08 09:57:10.058 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3537 unique vehicles from 7698 total records
+2025-09-08 09:57:10.058 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3537 records to 1 clients in batches of 10
+2025-09-08 09:57:10.102 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3537 records to WebSocket clients
+2025-09-08 09:57:10.102 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3537 GPS records
+2025-09-08 09:57:12.104 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:57:12.105 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:56:02 to 2025-09-08+09:57:12
+2025-09-08 09:57:12.107 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:56:02&dataFinal=2025-09-08+09:57:12
+2025-09-08 09:57:45.610 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1360307 characters
+2025-09-08 09:57:45.627 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7097 GPS records from JSON
+2025-09-08 09:57:45.628 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3525 unique vehicles from 7097 total records
+2025-09-08 09:57:45.628 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3525 records to 1 clients in batches of 10
+2025-09-08 09:57:45.653 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3525 records to WebSocket clients
+2025-09-08 09:57:45.653 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3525 GPS records
+2025-09-08 09:57:47.655 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:57:47.656 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:56:37 to 2025-09-08+09:57:47
+2025-09-08 09:57:47.656 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:56:37&dataFinal=2025-09-08+09:57:47
+2025-09-08 09:58:14.088 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1320023 characters
+2025-09-08 09:58:14.100 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 6885 GPS records from JSON
+2025-09-08 09:58:14.101 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3523 unique vehicles from 6885 total records
+2025-09-08 09:58:14.101 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3523 records to 1 clients in batches of 10
+2025-09-08 09:58:14.132 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3523 records to WebSocket clients
+2025-09-08 09:58:14.132 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3523 GPS records
+2025-09-08 09:58:16.136 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:58:16.137 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:57:06 to 2025-09-08+09:58:16
+2025-09-08 09:58:16.137 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:57:06&dataFinal=2025-09-08+09:58:16
+2025-09-08 09:58:45.858 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1410000 characters
+2025-09-08 09:58:45.868 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7355 GPS records from JSON
+2025-09-08 09:58:45.870 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3480 unique vehicles from 7355 total records
+2025-09-08 09:58:45.870 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3480 records to 1 clients in batches of 10
+2025-09-08 09:58:45.906 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3480 records to WebSocket clients
+2025-09-08 09:58:45.906 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3480 GPS records
+2025-09-08 09:58:47.916 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:58:47.917 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:57:37 to 2025-09-08+09:58:47
+2025-09-08 09:58:47.918 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:57:37&dataFinal=2025-09-08+09:58:47
+2025-09-08 09:58:59.818 [SpringApplicationShutdownHook] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.shutDownGracefully - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-08 09:58:59.829 [tomcat-shutdown] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.doShutdown - Graceful shutdown complete
+2025-09-08 09:59:03.615 [background-preinit] INFO  [null] o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 8.0.2.Final
+2025-09-08 09:59:03.668 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Starting LiveBusTrackingServiceApplication using Java 21.0.8 with PID 4408 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-09-08 09:59:03.669 [main] DEBUG [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-09-08 09:59:03.670 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-09-08 09:59:04.969 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+2025-09-08 09:59:04.982 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2025-09-08 09:59:04.984 [main] INFO  [null] o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2025-09-08 09:59:04.984 [main] INFO  [null] o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-09-08 09:59:05.038 [main] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2025-09-08 09:59:05.039 [main] INFO  [null] o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1308 ms
+2025-09-08 09:59:05.222 [main] DEBUG [null] c.a.l.config.MdcConfig$1.init - Filter 'mdcFilter' configured for use
+2025-09-08 09:59:05.679 [main] INFO  [null] o.s.b.a.e.web.EndpointLinksResolver.<init> - Exposing 3 endpoints beneath base path '/actuator'
+2025-09-08 09:59:05.727 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2025-09-08 09:59:05.750 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+2025-09-08 09:59:05.762 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarted - Started LiveBusTrackingServiceApplication in 2.63 seconds (process running for 2.997)
+2025-09-08 09:59:05.769 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:59:05.772 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:57:55 to 2025-09-08+09:59:05
+2025-09-08 09:59:05.786 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:57:55&dataFinal=2025-09-08+09:59:05
+2025-09-08 09:59:05.930 [http-nio-8080-exec-1] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-08 09:59:05.931 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+2025-09-08 09:59:05.932 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 1 ms
+2025-09-08 09:59:06.000 [http-nio-8080-exec-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: d89c161d-8d61-a3f5-9ed4-d76d2215f16f
+2025-09-08 09:59:22.912 [http-nio-8080-exec-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionClosed - Connection closed: d89c161d-8d61-a3f5-9ed4-d76d2215f16f - Reason: null
+2025-09-08 09:59:23.016 [http-nio-8080-exec-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 072e2f72-558e-2025-2009-aa44594a112c
+2025-09-08 09:59:41.900 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1540536 characters
+2025-09-08 09:59:42.001 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8037 GPS records from JSON
+2025-09-08 09:59:42.003 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3546 unique vehicles from 8037 total records
+2025-09-08 09:59:42.004 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3546 records to 1 clients in batches of 10
+2025-09-08 09:59:42.115 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3546 records to WebSocket clients
+2025-09-08 09:59:42.116 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3546 GPS records
+2025-09-08 09:59:44.122 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 09:59:44.122 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:58:34 to 2025-09-08+09:59:44
+2025-09-08 09:59:44.123 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:58:34&dataFinal=2025-09-08+09:59:44
+2025-09-08 10:00:13.741 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1382633 characters
+2025-09-08 10:00:13.763 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7213 GPS records from JSON
+2025-09-08 10:00:13.765 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3531 unique vehicles from 7213 total records
+2025-09-08 10:00:13.765 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3531 records to 1 clients in batches of 10
+2025-09-08 10:00:13.835 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3531 records to WebSocket clients
+2025-09-08 10:00:13.836 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3531 GPS records
+2025-09-08 10:00:15.844 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:00:15.844 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:59:05 to 2025-09-08+10:00:15
+2025-09-08 10:00:15.845 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:59:05&dataFinal=2025-09-08+10:00:15
+2025-09-08 10:00:55.646 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1395225 characters
+2025-09-08 10:00:55.654 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7279 GPS records from JSON
+2025-09-08 10:00:55.655 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3528 unique vehicles from 7279 total records
+2025-09-08 10:00:55.656 [GpsPolling-2] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3528 records to 1 clients in batches of 10
+2025-09-08 10:00:55.686 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3528 records to WebSocket clients
+2025-09-08 10:00:55.686 [GpsPolling-2] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3528 GPS records
+2025-09-08 10:00:57.694 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:00:57.695 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+09:59:47 to 2025-09-08+10:00:57
+2025-09-08 10:00:57.696 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+09:59:47&dataFinal=2025-09-08+10:00:57
+2025-09-08 10:01:26.469 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1437641 characters
+2025-09-08 10:01:26.477 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7500 GPS records from JSON
+2025-09-08 10:01:26.478 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3526 unique vehicles from 7500 total records
+2025-09-08 10:01:26.479 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3526 records to 1 clients in batches of 10
+2025-09-08 10:01:26.513 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3526 records to WebSocket clients
+2025-09-08 10:01:26.513 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3526 GPS records
+2025-09-08 10:01:28.523 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:01:28.523 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:00:18 to 2025-09-08+10:01:28
+2025-09-08 10:01:28.524 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:00:18&dataFinal=2025-09-08+10:01:28
+2025-09-08 10:02:02.422 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1437210 characters
+2025-09-08 10:02:02.430 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7498 GPS records from JSON
+2025-09-08 10:02:02.432 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3510 unique vehicles from 7498 total records
+2025-09-08 10:02:02.432 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3510 records to 1 clients in batches of 10
+2025-09-08 10:02:02.460 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3510 records to WebSocket clients
+2025-09-08 10:02:02.460 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3510 GPS records
+2025-09-08 10:02:04.463 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:02:04.464 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:00:54 to 2025-09-08+10:02:04
+2025-09-08 10:02:04.464 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:00:54&dataFinal=2025-09-08+10:02:04
+2025-09-08 10:02:42.940 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1566931 characters
+2025-09-08 10:02:42.950 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8174 GPS records from JSON
+2025-09-08 10:02:42.951 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3509 unique vehicles from 8174 total records
+2025-09-08 10:02:42.951 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3509 records to 1 clients in batches of 10
+2025-09-08 10:02:42.980 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3509 records to WebSocket clients
+2025-09-08 10:02:42.980 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3509 GPS records
+2025-09-08 10:02:44.982 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:02:44.983 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:01:34 to 2025-09-08+10:02:44
+2025-09-08 10:02:44.984 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:01:34&dataFinal=2025-09-08+10:02:44
+2025-09-08 10:03:20.903 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1499840 characters
+2025-09-08 10:03:20.911 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7824 GPS records from JSON
+2025-09-08 10:03:20.912 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3529 unique vehicles from 7824 total records
+2025-09-08 10:03:20.913 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3529 records to 1 clients in batches of 10
+2025-09-08 10:03:20.943 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3529 records to WebSocket clients
+2025-09-08 10:03:20.943 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3529 GPS records
+2025-09-08 10:03:22.945 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:03:22.945 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:02:12 to 2025-09-08+10:03:22
+2025-09-08 10:03:22.946 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:02:12&dataFinal=2025-09-08+10:03:22
+2025-09-08 10:03:50.105 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1408498 characters
+2025-09-08 10:03:50.111 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7346 GPS records from JSON
+2025-09-08 10:03:50.112 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3495 unique vehicles from 7346 total records
+2025-09-08 10:03:50.112 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3495 records to 1 clients in batches of 10
+2025-09-08 10:03:50.139 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3495 records to WebSocket clients
+2025-09-08 10:03:50.140 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3495 GPS records
+2025-09-08 10:03:52.147 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:03:52.147 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:02:42 to 2025-09-08+10:03:52
+2025-09-08 10:03:52.148 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:02:42&dataFinal=2025-09-08+10:03:52
+2025-09-08 10:04:20.637 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1407709 characters
+2025-09-08 10:04:20.646 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7343 GPS records from JSON
+2025-09-08 10:04:20.647 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3473 unique vehicles from 7343 total records
+2025-09-08 10:04:20.647 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3473 records to 1 clients in batches of 10
+2025-09-08 10:04:20.674 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3473 records to WebSocket clients
+2025-09-08 10:04:20.674 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3473 GPS records
+2025-09-08 10:04:22.685 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:04:22.685 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:03:12 to 2025-09-08+10:04:22
+2025-09-08 10:04:22.686 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:03:12&dataFinal=2025-09-08+10:04:22
+2025-09-08 10:04:46.818 [SpringApplicationShutdownHook] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.shutDownGracefully - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-08 10:04:46.831 [tomcat-shutdown] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.doShutdown - Graceful shutdown complete
+2025-09-08 10:14:42.657 [background-preinit] INFO  [null] o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 8.0.2.Final
+2025-09-08 10:14:42.709 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Starting LiveBusTrackingServiceApplication using Java 21.0.8 with PID 12128 (C:\Users\10598925708\IdeaProjects\live-bus-tracking-service\target\classes started by 10598925708 in C:\Users\10598925708\IdeaProjects\live-bus-tracking-service)
+2025-09-08 10:14:42.710 [main] DEBUG [null] c.a.l.LiveBusTrackingServiceApplication.logStarting - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-09-08 10:14:42.712 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-09-08 10:14:44.391 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+2025-09-08 10:14:44.406 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2025-09-08 10:14:44.410 [main] INFO  [null] o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2025-09-08 10:14:44.413 [main] INFO  [null] o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-09-08 10:14:44.514 [main] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2025-09-08 10:14:44.515 [main] INFO  [null] o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1744 ms
+2025-09-08 10:14:44.804 [main] DEBUG [null] c.a.l.config.MdcConfig$1.init - Filter 'mdcFilter' configured for use
+2025-09-08 10:14:45.491 [main] INFO  [null] o.s.b.a.e.web.EndpointLinksResolver.<init> - Exposing 3 endpoints beneath base path '/actuator'
+2025-09-08 10:14:45.543 [main] INFO  [null] o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2025-09-08 10:14:45.575 [main] INFO  [null] o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+2025-09-08 10:14:45.590 [main] INFO  [null] c.a.l.LiveBusTrackingServiceApplication.logStarted - Started LiveBusTrackingServiceApplication in 3.496 seconds (process running for 3.958)
+2025-09-08 10:14:45.600 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:14:45.604 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:13:35 to 2025-09-08+10:14:45
+2025-09-08 10:14:45.630 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:13:35&dataFinal=2025-09-08+10:14:45
+2025-09-08 10:14:48.000 [http-nio-8080-exec-1] INFO  [null] o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-08 10:14:48.001 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+2025-09-08 10:14:48.002 [http-nio-8080-exec-1] INFO  [null] o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 1 ms
+2025-09-08 10:14:48.044 [http-nio-8080-exec-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: a5ad6fef-784b-cc79-3967-be69bae341d5
+2025-09-08 10:14:48.529 [http-nio-8080-exec-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionClosed - Connection closed: a5ad6fef-784b-cc79-3967-be69bae341d5 - Reason: null
+2025-09-08 10:14:48.653 [http-nio-8080-exec-5] INFO  [null] c.a.l.handler.GpsWebSocketHandler.afterConnectionEstablished - New client connected: 21d13d11-eb61-2471-ceae-90f3cb997618
+2025-09-08 10:15:13.907 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1283048 characters
+2025-09-08 10:15:14.005 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 6692 GPS records from JSON
+2025-09-08 10:15:14.007 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3462 unique vehicles from 6692 total records
+2025-09-08 10:15:14.008 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3462 records to 1 clients in batches of 10
+2025-09-08 10:15:14.145 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3462 records to WebSocket clients
+2025-09-08 10:15:14.146 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3462 GPS records
+2025-09-08 10:15:16.162 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:15:16.163 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:14:06 to 2025-09-08+10:15:16
+2025-09-08 10:15:16.164 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:14:06&dataFinal=2025-09-08+10:15:16
+2025-09-08 10:15:45.474 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1324848 characters
+2025-09-08 10:15:45.503 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 6910 GPS records from JSON
+2025-09-08 10:15:45.504 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3468 unique vehicles from 6910 total records
+2025-09-08 10:15:45.505 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3468 records to 1 clients in batches of 10
+2025-09-08 10:15:45.573 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3468 records to WebSocket clients
+2025-09-08 10:15:45.573 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3468 GPS records
+2025-09-08 10:15:47.584 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:15:47.585 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:14:37 to 2025-09-08+10:15:47
+2025-09-08 10:15:47.585 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:14:37&dataFinal=2025-09-08+10:15:47
+2025-09-08 10:16:15.689 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1324013 characters
+2025-09-08 10:16:15.700 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 6907 GPS records from JSON
+2025-09-08 10:16:15.701 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3504 unique vehicles from 6907 total records
+2025-09-08 10:16:15.702 [GpsPolling-2] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3504 records to 1 clients in batches of 10
+2025-09-08 10:16:15.749 [GpsPolling-2] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3504 records to WebSocket clients
+2025-09-08 10:16:15.750 [GpsPolling-2] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3504 GPS records
+2025-09-08 10:16:17.762 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:16:17.764 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:15:07 to 2025-09-08+10:16:17
+2025-09-08 10:16:17.764 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:15:07&dataFinal=2025-09-08+10:16:17
+2025-09-08 10:16:35.030 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1362936 characters
+2025-09-08 10:16:35.044 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7109 GPS records from JSON
+2025-09-08 10:16:35.045 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3471 unique vehicles from 7109 total records
+2025-09-08 10:16:35.046 [GpsPolling-1] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3471 records to 1 clients in batches of 10
+2025-09-08 10:16:35.087 [GpsPolling-1] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3471 records to WebSocket clients
+2025-09-08 10:16:35.088 [GpsPolling-1] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3471 GPS records
+2025-09-08 10:16:37.094 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:16:37.095 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:15:27 to 2025-09-08+10:16:37
+2025-09-08 10:16:37.096 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:15:27&dataFinal=2025-09-08+10:16:37
+2025-09-08 10:17:22.584 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1535394 characters
+2025-09-08 10:17:22.600 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8009 GPS records from JSON
+2025-09-08 10:17:22.602 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3475 unique vehicles from 8009 total records
+2025-09-08 10:17:22.602 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3475 records to 1 clients in batches of 10
+2025-09-08 10:17:22.649 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3475 records to WebSocket clients
+2025-09-08 10:17:22.649 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3475 GPS records
+2025-09-08 10:17:24.651 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:17:24.651 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:16:14 to 2025-09-08+10:17:24
+2025-09-08 10:17:24.652 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:16:14&dataFinal=2025-09-08+10:17:24
+2025-09-08 10:18:00.186 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1413803 characters
+2025-09-08 10:18:00.205 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7376 GPS records from JSON
+2025-09-08 10:18:00.211 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3474 unique vehicles from 7376 total records
+2025-09-08 10:18:00.212 [GpsPolling-3] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3474 records to 1 clients in batches of 10
+2025-09-08 10:18:00.263 [GpsPolling-3] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3474 records to WebSocket clients
+2025-09-08 10:18:00.263 [GpsPolling-3] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3474 GPS records
+2025-09-08 10:18:02.273 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:18:02.274 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:16:52 to 2025-09-08+10:18:02
+2025-09-08 10:18:02.275 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:16:52&dataFinal=2025-09-08+10:18:02
+2025-09-08 10:18:32.875 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1587491 characters
+2025-09-08 10:18:32.885 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8282 GPS records from JSON
+2025-09-08 10:18:32.887 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3518 unique vehicles from 8282 total records
+2025-09-08 10:18:32.887 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3518 records to 1 clients in batches of 10
+2025-09-08 10:18:32.931 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3518 records to WebSocket clients
+2025-09-08 10:18:32.932 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3518 GPS records
+2025-09-08 10:18:34.947 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:18:34.947 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:17:24 to 2025-09-08+10:18:34
+2025-09-08 10:18:34.948 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:17:24&dataFinal=2025-09-08+10:18:34
+2025-09-08 10:19:14.727 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1591929 characters
+2025-09-08 10:19:14.736 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 8305 GPS records from JSON
+2025-09-08 10:19:14.745 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3483 unique vehicles from 8305 total records
+2025-09-08 10:19:14.746 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3483 records to 1 clients in batches of 10
+2025-09-08 10:19:14.785 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3483 records to WebSocket clients
+2025-09-08 10:19:14.785 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3483 GPS records
+2025-09-08 10:19:16.797 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:19:16.798 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:18:06 to 2025-09-08+10:19:16
+2025-09-08 10:19:16.799 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:18:06&dataFinal=2025-09-08+10:19:16
+2025-09-08 10:19:54.294 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1401778 characters
+2025-09-08 10:19:54.305 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7312 GPS records from JSON
+2025-09-08 10:19:54.307 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3456 unique vehicles from 7312 total records
+2025-09-08 10:19:54.307 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3456 records to 1 clients in batches of 10
+2025-09-08 10:19:54.350 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3456 records to WebSocket clients
+2025-09-08 10:19:54.351 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3456 GPS records
+2025-09-08 10:19:56.364 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:19:56.366 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:18:46 to 2025-09-08+10:19:56
+2025-09-08 10:19:56.367 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:18:46&dataFinal=2025-09-08+10:19:56
+2025-09-08 10:20:27.259 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1276568 characters
+2025-09-08 10:20:27.269 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 6659 GPS records from JSON
+2025-09-08 10:20:27.270 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3469 unique vehicles from 6659 total records
+2025-09-08 10:20:27.272 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3469 records to 1 clients in batches of 10
+2025-09-08 10:20:27.313 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3469 records to WebSocket clients
+2025-09-08 10:20:27.313 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3469 GPS records
+2025-09-08 10:20:29.328 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:20:29.329 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:19:19 to 2025-09-08+10:20:29
+2025-09-08 10:20:29.329 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:19:19&dataFinal=2025-09-08+10:20:29
+2025-09-08 10:21:06.283 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1395786 characters
+2025-09-08 10:21:06.309 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7282 GPS records from JSON
+2025-09-08 10:21:06.311 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3472 unique vehicles from 7282 total records
+2025-09-08 10:21:06.311 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3472 records to 1 clients in batches of 10
+2025-09-08 10:21:06.355 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3472 records to WebSocket clients
+2025-09-08 10:21:06.355 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3472 GPS records
+2025-09-08 10:21:08.358 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:21:08.358 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:19:58 to 2025-09-08+10:21:08
+2025-09-08 10:21:08.359 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:19:58&dataFinal=2025-09-08+10:21:08
+2025-09-08 10:21:45.458 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1461131 characters
+2025-09-08 10:21:45.465 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7623 GPS records from JSON
+2025-09-08 10:21:45.466 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3423 unique vehicles from 7623 total records
+2025-09-08 10:21:45.467 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3423 records to 1 clients in batches of 10
+2025-09-08 10:21:45.519 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3423 records to WebSocket clients
+2025-09-08 10:21:45.520 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3423 GPS records
+2025-09-08 10:21:47.532 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:21:47.533 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:20:37 to 2025-09-08+10:21:47
+2025-09-08 10:21:47.533 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:20:37&dataFinal=2025-09-08+10:21:47
+2025-09-08 10:22:20.786 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1474149 characters
+2025-09-08 10:22:20.795 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7690 GPS records from JSON
+2025-09-08 10:22:20.796 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3441 unique vehicles from 7690 total records
+2025-09-08 10:22:20.797 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3441 records to 1 clients in batches of 10
+2025-09-08 10:22:20.834 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3441 records to WebSocket clients
+2025-09-08 10:22:20.834 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3441 GPS records
+2025-09-08 10:22:22.836 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:22:22.837 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:21:12 to 2025-09-08+10:22:22
+2025-09-08 10:22:22.838 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:21:12&dataFinal=2025-09-08+10:22:22
+2025-09-08 10:22:58.875 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Received response with 1360991 characters
+2025-09-08 10:22:58.890 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.parseGpsData - Parsed 7099 GPS records from JSON
+2025-09-08 10:22:58.891 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.getLatestUpdates - Filtered 3438 unique vehicles from 7099 total records
+2025-09-08 10:22:58.892 [GpsPolling-4] INFO  [null] c.a.l.handler.GpsWebSocketHandler.broadcastUpdate - Broadcasting 3438 records to 1 clients in batches of 10
+2025-09-08 10:22:58.924 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.processData - Broadcasted 3438 records to WebSocket clients
+2025-09-08 10:22:58.924 [GpsPolling-4] INFO  [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Polling completed: processed 3438 GPS records
+2025-09-08 10:23:00.940 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Starting scheduled GPS polling
+2025-09-08 10:23:00.940 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.lambda$checkForUpdates$1 - Fetching GPS data from 2025-09-08+10:21:50 to 2025-09-08+10:23:00
+2025-09-08 10:23:00.940 [GpsPolling-4] DEBUG [null] c.a.l.service.GpsPollingService.fetchGpsData - Making request to URL: https://dados.mobilidade.rio/gps/sppo?dataInicial=2025-09-08+10:21:50&dataFinal=2025-09-08+10:23:00
+2025-09-08 10:23:19.502 [SpringApplicationShutdownHook] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.shutDownGracefully - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-08 10:23:19.523 [tomcat-shutdown] INFO  [null] o.s.b.w.e.tomcat.GracefulShutdown.doShutdown - Graceful shutdown complete

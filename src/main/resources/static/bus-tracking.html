@@ -310,22 +310,28 @@
         }
         .itinerary-btn {
             padding: 8px 15px;
-            background-color: #9b59b6;
+            background-color: #6f42c1;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
         .itinerary-btn:hover {
-            background-color: #8e44ad;
+            background-color: #5a359c;
         }
+
         .itinerary-btn.active {
-            background-color: #7d3c98;
+            background-color: #4a2d80;
         }
         .itinerary-info {
             font-size: 14px;
             color: #7f8c8d;
             margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #6c757d;
         }
 
         @media (max-width: 768px) {
@@ -340,9 +346,16 @@
                 flex-direction: column;
             }
             .itinerary-controls {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
         }
     </style>
 </head>
@@ -368,11 +381,11 @@
     <div class="search-container">
         <div class="search-group">
             <label for="search-line" class="search-label">Filtrar por Linha:</label>
-            <input type="text" id="search-line" class="search-input" placeholder="Ex: 123, 456...">
+            <input type="text" id="search-line" class="search-input" placeholder="Ex: 123, 456, 789...">
         </div>
         <div class="search-group">
             <label for="search-order" class="search-label">Filtrar por Ordem:</label>
-            <input type="text" id="search-order" class="search-input" placeholder="Ex: 1001, 1002...">
+            <input type="text" id="search-order" class="search-input" placeholder="Ex: 1001, 1002, 1003...">
         </div>
         <button id="search-map-btn">Buscar e Mostrar Mapa</button>
     </div>
@@ -428,7 +441,7 @@
                 <option value="both">Ambas</option>
             </select>
 
-            <button id="show-itinerary-btn" class="itinerary-btn">Mostrar Itinerário da Linha Filtrada</button>
+            <button id="show-itinerary-btn" class="itinerary-btn">Mostrar Itinerário das Linhas Filtradas</button>
             <button id="hide-itinerary-btn" class="itinerary-btn">Ocultar Itinerário</button>
 
             <span id="itinerary-info" class="itinerary-info"></span>
@@ -814,108 +827,120 @@ const fetchAddressSuggestions = async (query) => {
         return document.getElementById('search-line').value.trim();
     };
 
-    // Mostrar itinerário no mapa
-    const showItinerary = () => {
-        const selectedLine = getSelectedLineFromFilter();
-        const selectedDirection = document.getElementById('itinerary-direction-select').value;
-
-        if (!selectedLine) {
-            alert('Por favor, digite uma linha no filtro "Filtrar por Linha" primeiro.');
-            return;
-        }
-
-        if (!itineraryData || !itineraryData.features) {
-            alert('Dados de itinerário não carregados. Tente novamente em alguns instantes.');
-            return;
-        }
-
-        // Limpar itinerários anteriores
-        hideItinerary();
-
-        // Filtrar features pela linha selecionada
-        const lineFeatures = itineraryData.features.filter(feature =>
-            feature.properties && feature.properties.servico === selectedLine
-        );
-
-        if (lineFeatures.length === 0) {
-            document.getElementById('itinerary-info').textContent = 'Nenhum itinerário encontrado para esta linha';
-            return;
-        }
-
-        // Filtrar por direção se necessário
-        let featuresToShow = [];
-        if (selectedDirection === 'both') {
-            featuresToShow = lineFeatures;
-        } else {
-            const direction = parseInt(selectedDirection);
-            featuresToShow = lineFeatures.filter(feature =>
-                feature.properties && feature.properties.direcao === direction
-            );
-        }
-
-        if (featuresToShow.length === 0) {
-            const directionName = selectedDirection === '0' ? 'volta' : 'ida';
-            document.getElementById('itinerary-info').textContent = `Nenhum itinerário de ${directionName} encontrado`;
-            return;
-        }
-
-        // Adicionar cada itinerário ao mapa
-        featuresToShow.forEach(feature => {
-            if (feature.geometry && feature.geometry.coordinates) {
-                // Converter coordenadas para o formato [lat, lng] que o Leaflet espera
-                const latLngs = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]);
-
-                // Criar uma polilinha com estilos diferentes para ida e volta
-                const color = feature.properties.direcao === 1 ? '#007bff' : '#ff0000'; // Azul para ida, Vermelho para volta
-                const weight = feature.properties.direcao === 1 ? 4 : 4;
-                const opacity = feature.properties.direcao === 1 ? 0.7 : 0.8;
-                const dashArray = null; // Sólido para ambas as direções (remover o tracejado)
-
-                const polyline = L.polyline(latLngs, {
-                    color: color,
-                    weight: weight,
-                    opacity: opacity,
-                    dashArray: dashArray
-                }).addTo(map);
-
-                // Adicionar popup com informações
-                const directionName = feature.properties.direcao === 1 ? 'IDA' : 'VOLTA';
-                polyline.bindPopup(`
-                    <strong>Linha ${feature.properties.servico}</strong><br>
-                    Direção: ${directionName}<br>
-                    Destino: ${feature.properties.destino || 'N/A'}<br>
-                    Consórcio: ${feature.properties.consorcio || 'N/A'}
-                `);
-
-                // Armazenar referência para remoção posterior
-                const key = `${feature.properties.servico}_${feature.properties.direcao}`;
-                if (!currentItineraryLines[key]) {
-                    currentItineraryLines[key] = [];
-                }
-                currentItineraryLines[key].push(polyline);
+    // Obter linhas únicas dos ônibus filtrados
+    const getFilteredLines = () => {
+        const lines = new Set();
+        filteredBusesData.forEach(bus => {
+            if (bus.linha) {
+                lines.add(bus.linha);
             }
         });
-
-        // Ajustar a visualização do mapa para mostrar todos os itinerários
-        const bounds = new L.LatLngBounds();
-        featuresToShow.forEach(feature => {
-            if (feature.geometry && feature.geometry.coordinates) {
-                feature.geometry.coordinates.forEach(coord => {
-                    bounds.extend([coord[1], coord[0]]);
-                });
-            }
-        });
-
-        if (bounds.isValid()) {
-            map.fitBounds(bounds.pad(0.1));
-        }
-
-        // Atualizar informação
-        const directionText = selectedDirection === 'both' ? 'idas e voltas' :
-                            (selectedDirection === '1' ? 'ida' : 'volta');
-        document.getElementById('itinerary-info').textContent =
-            `Itinerário(s) da linha ${selectedLine} (${directionText}) exibido(s)`;
+        return Array.from(lines);
     };
+
+    // Mostrar itinerário no mapa
+const showItinerary = () => {
+    const selectedDirection = document.getElementById('itinerary-direction-select').value;
+
+    // Obter linhas dos ônibus filtrados
+    const filteredLines = getFilteredLines();
+
+    if (filteredLines.length === 0) {
+        alert('Nenhuma linha encontrada nos filtros atuais. Ajuste os filtros primeiro.');
+        return;
+    }
+
+    if (!itineraryData || !itineraryData.features) {
+        alert('Dados de itinerário não carregados. Tente novamente em alguns instantes.');
+        return;
+    }
+
+    // Limpar itinerários anteriores
+    hideItinerary();
+
+    // Filtrar features pelas linhas filtradas
+    const lineFeatures = itineraryData.features.filter(feature =>
+        feature.properties && filteredLines.includes(feature.properties.servico)
+    );
+
+    if (lineFeatures.length === 0) {
+        document.getElementById('itinerary-info').textContent = 'Nenhum itinerário encontrado para as linhas filtradas';
+        return;
+    }
+
+    // Filtrar por direção se necessário
+    let featuresToShow = [];
+    if (selectedDirection === 'both') {
+        featuresToShow = lineFeatures;
+    } else {
+        const direction = parseInt(selectedDirection);
+        featuresToShow = lineFeatures.filter(feature =>
+            feature.properties && feature.properties.direcao === direction
+        );
+    }
+
+    if (featuresToShow.length === 0) {
+        const directionName = selectedDirection === '0' ? 'volta' : 'ida';
+        document.getElementById('itinerary-info').textContent = `Nenhum itinerário de ${directionName} encontrado para as linhas filtradas`;
+        return;
+    }
+
+    // Adicionar cada itinerário ao mapa
+    featuresToShow.forEach(feature => {
+        if (feature.geometry && feature.geometry.coordinates) {
+            // Converter coordenadas para o formato [lat, lng] que o Leaflet espera
+            const latLngs = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+
+            // Criar uma polilinha com estilos diferentes para ida e volta
+            const color = feature.properties.direcao === 1 ? '#007bff' : '#ff0000';
+            const weight = 4;
+            const opacity = feature.properties.direcao === 1 ? 0.7 : 0.8;
+
+            const polyline = L.polyline(latLngs, {
+                color: color,
+                weight: weight,
+                opacity: opacity,
+                dashArray: null // Sólido para ambas as direções
+            }).addTo(map);
+
+            // Adicionar popup com informações
+            const directionName = feature.properties.direcao === 1 ? 'IDA' : 'VOLTA';
+            polyline.bindPopup(`
+                <strong>Linha ${feature.properties.servico}</strong><br>
+                Direção: ${directionName}<br>
+                Destino: ${feature.properties.destino || 'N/A'}<br>
+                Consórcio: ${feature.properties.consorcio || 'N/A'}
+            `);
+
+            // Armazenar referência para remoção posterior
+            const key = `${feature.properties.servico}_${feature.properties.direcao}`;
+            if (!currentItineraryLines[key]) {
+                currentItineraryLines[key] = [];
+            }
+            currentItineraryLines[key].push(polyline);
+        }
+    });
+
+    // Ajustar a visualização do mapa para mostrar todos os itinerários
+    const bounds = new L.LatLngBounds();
+    featuresToShow.forEach(feature => {
+        if (feature.geometry && feature.geometry.coordinates) {
+            feature.geometry.coordinates.forEach(coord => {
+                bounds.extend([coord[1], coord[0]]);
+            });
+        }
+    });
+
+    if (bounds.isValid()) {
+        map.fitBounds(bounds.pad(0.1));
+    }
+
+    // Atualizar informação
+    const directionText = selectedDirection === 'both' ? 'idas e voltas' :
+                        (selectedDirection === '1' ? 'ida' : 'volta');
+    document.getElementById('itinerary-info').textContent =
+        `Itinerário(s) de ${filteredLines.length} linha(s) (${directionText}) exibido(s): ${filteredLines.join(', ')}`;
+};
 
     // Ocultar itinerários do mapa
     const hideItinerary = () => {
@@ -1039,16 +1064,28 @@ const fetchAddressSuggestions = async (query) => {
     };
 
     // Aplicar filtros de linha e ordem
-    const applyFilters = () => {
-        const lineFilter = document.getElementById('search-line').value.toLowerCase();
-        const orderFilter = document.getElementById('search-order').value.toLowerCase();
+        const applyFilters = () => {
+        const lineFilter = document.getElementById('search-line').value.trim();
+        const orderFilter = document.getElementById('search-order').value.trim();
 
-        if (!lineFilter && !orderFilter) {
+        // Processar múltiplas linhas (separadas por vírgula)
+        const lineFilters = lineFilter ? lineFilter.split(',').map(line => line.trim().toLowerCase()) : [];
+
+        // Processar múltiplas ordens (separadas por vírgula)
+        const orderFilters = orderFilter ? orderFilter.split(',').map(order => order.trim().toLowerCase()) : [];
+
+        if (lineFilters.length === 0 && orderFilters.length === 0) {
             filteredBusesData = [...allBusesData];
         } else {
             filteredBusesData = allBusesData.filter(bus => {
-                const lineMatch = !lineFilter || (bus.linha && bus.linha.toLowerCase().includes(lineFilter));
-                const orderMatch = !orderFilter || (bus.ordem && bus.ordem.toLowerCase().includes(orderFilter));
+                // Verificar se atende a pelo menos um dos filtros de linha
+                const lineMatch = lineFilters.length === 0 ||
+                    lineFilters.some(filter => bus.linha && bus.linha.toLowerCase().includes(filter));
+
+                // Verificar se atende a pelo menos um dos filtros de ordem
+                const orderMatch = orderFilters.length === 0 ||
+                    orderFilters.some(filter => bus.ordem && bus.ordem.toLowerCase().includes(filter));
+
                 return lineMatch && orderMatch;
             });
         }
@@ -1087,8 +1124,23 @@ const fetchAddressSuggestions = async (query) => {
 
     // Atualizar estatísticas
     const updateStats = () => {
-        document.getElementById('total-buses').textContent = allBusesData.length;
-        document.getElementById('visible-buses').textContent = filteredBusesData.length;
+    document.getElementById('total-buses').textContent = allBusesData.length;
+    document.getElementById('visible-buses').textContent = filteredBusesData.length;
+
+    // Mostrar informações dos filtros ativos
+        const lineFilter = document.getElementById('search-line').value.trim();
+        const orderFilter = document.getElementById('search-order').value.trim();
+
+        let filterInfo = '';
+        if (lineFilter) {
+            const lineCount = lineFilter.split(',').length;
+            filterInfo += `${lineCount} linha(s) `;
+        }
+        if (orderFilter) {
+            const orderCount = orderFilter.split(',').length;
+            if (filterInfo) filterInfo += 'e ';
+            filterInfo += `${orderCount} ordem(ns)`;
+        }
     };
 
     // Atualizar controles de paginação
@@ -1143,20 +1195,34 @@ const fetchAddressSuggestions = async (query) => {
 
     // Filtrar tabela com base nos critérios de busca
     const performSearch = () => {
-        applyFilters();
-        currentPage = 1;
-        updateStats();
-        renderTable();
+    applyFilters();
+    currentPage = 1;
+    updateStats();
+    renderTable();
 
-        // Se estiver mostrando o mapa, atualizar com os resultados da busca
-        if (showMap) {
-            showingAllBuses = false;
-            updateMapMarkers(false);
+    // Atualizar informações de itinerário disponível
+    const filteredLines = getFilteredLines();
+    if (filteredLines.length > 0) {
+        document.getElementById('itinerary-info').textContent =
+            `${filteredLines.length} linha(s) disponível(is) para mostrar itinerário: ${filteredLines.join(', ')}`;
+    } else {
+        document.getElementById('itinerary-info').textContent = 'Nenhuma linha disponível para itinerário';
+    }
+
+    // Se estiver mostrando o mapa, atualizar com os resultados da busca
+     if (showMap) {
+        showingAllBuses = false;
+        updateMapMarkers(false);
+
+        // Se já estava mostrando itinerário, atualizar também
+            if (Object.keys(currentItineraryLines).length > 0) {
+                showItinerary();
+            }
         }
     };
 
     // Limpar todos os filtros
-    const clearFilters = () => {
+        const clearFilters = () => {
         document.getElementById('search-line').value = '';
         document.getElementById('search-order').value = '';
         document.getElementById('search-address').value = '';
@@ -1170,8 +1236,29 @@ const fetchAddressSuggestions = async (query) => {
         // Esconder sugestões de autocomplete
         document.getElementById('autocomplete-suggestions').style.display = 'none';
 
+        // Limpar itinerário se estiver visível
+        hideItinerary();
+
         performSearch();
     };
+
+    // Atualizar automaticamente o itinerário quando os filtros mudarem (opcional)
+    const setupItineraryAutoUpdate = () => {
+        const searchInputs = document.querySelectorAll('.search-input');
+        searchInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                // Se o itinerário estiver visível, atualizar automaticamente
+                if (Object.keys(currentItineraryLines).length > 0) {
+                    performSearch();
+                    // Pequeno delay para garantir que os dados foram processados
+                    setTimeout(showItinerary, 100);
+                } else {
+                    performSearch();
+                }
+            });
+        });
+    };
+
 
     // Iniciar busca e mostrar mapa
     document.getElementById('search-map-btn').addEventListener('click', () => {
@@ -1296,6 +1383,7 @@ const fetchAddressSuggestions = async (query) => {
     window.onload = function() {
         connectWebSocket();
         loadItineraryData(); // Carregar dados de itinerário
+        setupItineraryAutoUpdate();
     };
 </script>
 </body>
