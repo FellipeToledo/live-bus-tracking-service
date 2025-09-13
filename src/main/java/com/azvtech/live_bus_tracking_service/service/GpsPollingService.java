@@ -105,7 +105,7 @@ public class GpsPollingService {
                 logger.debug("Starting scheduled GPS polling");
                 try {
                     LocalDateTime dataFinal = LocalDateTime.now();
-                    LocalDateTime dataInicial = dataFinal.minusSeconds(70);
+                    LocalDateTime dataInicial = dataFinal.minusSeconds(90);
 
                     String dataInicialStr = DateUtils.format(dataInicial);
                     String dataFinalStr = DateUtils.format(dataFinal);

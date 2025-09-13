@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
     <style>
         /* Estilos existentes (mantidos) */
         body {
@@ -357,6 +360,67 @@
             border: 1px solid #e9ecef;
         }
         }
+
+        /* Estilos para clusters */
+.marker-cluster-custom {
+    background-color: rgba(44, 62, 80, 0.6);
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.marker-cluster-custom div {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+.cluster-small {
+    background-color: rgba(52, 152, 219, 0.7);
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+
+.cluster-medium {
+    background-color: rgba(241, 196, 15, 0.7);
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+.cluster-large {
+    background-color: rgba(231, 76, 60, 0.7);
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+}
+
+/* Popup de cluster melhorado */
+.marker-cluster-popup {
+    max-width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.cluster-popup-item {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+    font-size: 12px;
+}
+
+.cluster-popup-item:last-child {
+    border-bottom: none;
+}
     </style>
 </head>
 <body>
@@ -451,6 +515,7 @@
             <div class="map-buttons">
                 <button id="toggle-map" class="map-toggle">Ocultar Mapa</button>
                 <button id="show-all-btn" class="show-all-btn">Mostrar Todos no Mapa</button>
+                <button id="toggle-cluster" class="map-toggle">Desativar Cluster</button>
             </div>
             <span id="map-buses-count" class="map-info">0 ônibus no mapa</span>
         </div>
@@ -462,8 +527,14 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
 <script>
+    // Variáveis para clusterização
+    let markerCluster = null;
+    let currentZoomLevel = 12;
+    let clusterEnabled = true;
+
     let allBusesData = [];
     let currentUpdateBusesData = []; // Dados da atualização atual (todos os batches)
     let filteredBusesData = [];
@@ -492,22 +563,92 @@
     let currentItineraryLines = {}; // Armazenará as linhas de itinerário atualmente exibidas
 
     // Inicializar o mapa
-    const initMap = () => {
-        // Coordenadas padrão (centro da cidade, por exemplo)
-        const defaultCenter = [-23.5505, -46.6333]; // São Paulo
+   const initMap = () => {
+    const defaultCenter = [-23.5505, -46.6333];
 
-        map = L.map('map').setView(defaultCenter, 12);
+    map = L.map('map').setView(defaultCenter, 12);
 
-        // Adicionar camada do OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-        mapInitialized = true;
+    // Inicializar cluster de marcadores (AGORA DENTRO DA FUNÇÃO initMap)
+    markerCluster = L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkInterval: 100,
+        disableClusteringAtZoom: 16,
+        maxClusterRadius: 80,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: true,
+        zoomToBoundsOnClick: true,
+        iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = 'small';
+            if (count > 100) size = 'large';
+            else if (count > 10) size = 'medium';
 
-        // Salvar a visualização inicial
-        saveMapView();
-    };
+            return L.divIcon({
+                html: `<div class="cluster cluster-${size}">${count}</div>`,
+                className: 'marker-cluster-custom',
+                iconSize: L.point(40, 40)
+            });
+        }
+    });
+
+    if (clusterEnabled) {
+        map.addLayer(markerCluster);
+    }
+
+    // Event listener para mudanças de zoom
+    map.on('zoomend', function() {
+        currentZoomLevel = map.getZoom();
+        updateClusterBehavior();
+    });
+
+    mapInitialized = true;
+    saveMapView();
+};
+
+// Toggle clusterização
+document.getElementById('toggle-cluster').addEventListener('click', () => {
+    clusterEnabled = !clusterEnabled;
+    const toggleButton = document.getElementById('toggle-cluster');
+
+    if (clusterEnabled) {
+        // Remover todos os marcadores diretamente do mapa
+        Object.values(busMarkers).forEach(marker => {
+            if (map.hasLayer(marker)) {
+                map.removeLayer(marker);
+            }
+        });
+
+        // Limpar e recriar o cluster group para garantir limpeza total
+        markerCluster.clearLayers();
+
+        // Adicionar todos os marcadores ao cluster
+        markerCluster.addLayers(Object.values(busMarkers));
+
+        // Adicionar o cluster de volta ao mapa
+        map.addLayer(markerCluster);
+
+        toggleButton.textContent = 'Desativar Cluster';
+        console.log('Cluster ativado - marcadores clusterizados:', Object.keys(busMarkers).length);
+    } else {
+        // Remover o cluster do mapa
+        map.removeLayer(markerCluster);
+
+        // Adicionar marcadores individualmente ao mapa
+        Object.values(busMarkers).forEach(marker => {
+            marker.addTo(map);
+        });
+
+        toggleButton.textContent = 'Ativar Cluster';
+        console.log('Cluster desativado - marcadores individuais:', Object.keys(busMarkers).length);
+    }
+
+    // Forçar redesenho do mapa
+    map.invalidateSize();
+});
 
     // Salvar a visualização atual do mapa
     const saveMapView = () => {
@@ -666,118 +807,269 @@ const fetchAddressSuggestions = async (query) => {
 };
 
     // Atualizar marcadores no mapa
-    const updateMapMarkers = (showAll = false) => {
-        if (!mapInitialized) return;
+   const updateMapMarkers = (showAll = false) => {
+    if (!mapInitialized) return;
 
-        // Salvar a visualização atual antes de atualizar
-        const currentCenter = map.getCenter();
-        const currentZoom = map.getZoom();
-        const userInteracting = map._moving; // Verificar se o usuário está interagindo com o mapa
+    const currentCenter = map.getCenter();
+    const currentZoom = map.getZoom();
+    const userInteracting = map._moving;
 
-        // Limpar marcadores antigos (apenas ônibus, mantém o marcador de endereço)
+    // Limpar marcadores antigos de maneira robusta
+    if (clusterEnabled && markerCluster) {
+        // Modo cluster ativo - limpar apenas o cluster
+        markerCluster.clearLayers();
+    } else {
+        // Modo cluster inativo - remover marcadores individuais do mapa
         Object.values(busMarkers).forEach(marker => {
-            map.removeLayer(marker);
-        });
-        busMarkers = {};
-
-        // Determinar quais dados usar
-        const dataToShow = showAll ? allBusesData : filteredBusesData;
-        showingAllBuses = showAll;
-
-        // Atualizar texto do botão
-        document.getElementById('show-all-btn').textContent =
-            showAll ? 'Voltar para Busca' : 'Mostrar Todos no Mapa';
-
-        // Verificar se há dados para exibir no mapa
-        if (dataToShow.length === 0) {
-            document.getElementById('map-buses-count').textContent = 'Nenhum ônibus para exibir';
-            return;
-        }
-
-        // Adicionar novos marcadores apenas para os ônibus com coordenadas
-        const busesWithCoords = dataToShow.filter(bus => bus.latitude && bus.longitude);
-
-        busesWithCoords.forEach(bus => {
-            // Criar marcador personalizado
-            const markerIcon = L.divIcon({
-                className: 'bus-marker-icon',
-                html: `
-                    <div class="bus-marker">
-                        <div class="bus-marker-line">${bus.linha || ''}</div>
-                    </div>
-                `,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            const marker = L.marker([bus.latitude, bus.longitude], {icon: markerIcon})
-                .addTo(map);
-
-            // Adicionar popup com informações do ônibus
-            marker.bindPopup(`
-                <strong>Ônibus ${bus.ordem || 'N/A'}</strong><br>
-                Linha: ${bus.linha || 'N/A'}<br>
-                Velocidade: ${bus.velocidade || '0'} km/h<br>
-                Última atualização: ${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}
-            `);
-
-            busMarkers[bus.ordem] = marker;
-        });
-
-        // Atualizar contador no mapa
-        const totalBuses = Object.keys(busMarkers).length;
-        const totalText = showAll ?
-            `${totalBuses} de ${allBusesData.length} ônibus no mapa (todos)` :
-            `${totalBuses} ônibus no mapa`;
-
-        document.getElementById('map-buses-count').textContent = totalText;
-
-        // Manter a visualização atual se o usuário estava interagindo com o mapa
-        // Apenas ajustar a visualização se for a primeira vez ou se o usuário não estava interagindo
-        if (!userInteracting && totalBuses > 0) {
-            const group = new L.featureGroup(Object.values(busMarkers));
-
-            // Se é a primeira vez carregando o mapa ou não há visualização salva
-            if (!currentMapView || currentZoom === 12) {
-                map.fitBounds(group.getBounds().pad(0.1));
-            } else {
-                // Restaurar a visualização anterior
-                map.setView(currentCenter, currentZoom);
+            if (map.hasLayer(marker)) {
+                map.removeLayer(marker);
             }
-        }
+        });
+    }
 
-        // Salvar a visualização atual para futuras atualizações
-        saveMapView();
-    };
+    // Limpar referências dos marcadores antigos
+    busMarkers = {};
+
+    const dataToShow = showAll ? allBusesData : filteredBusesData;
+    showingAllBuses = showAll;
+
+    document.getElementById('show-all-btn').textContent =
+        showAll ? 'Voltar para Busca' : 'Mostrar Todos no Mapa';
+
+    if (dataToShow.length === 0) {
+        document.getElementById('map-buses-count').textContent = 'Nenhum ônibus para exibir';
+        updateClusterButtonState();
+        return;
+    }
+
+    const busesWithCoords = dataToShow.filter(bus => bus.latitude && bus.longitude);
+    const markers = [];
+
+    busesWithCoords.forEach(bus => {
+        const markerIcon = L.divIcon({
+            className: 'bus-marker-icon',
+            html: `
+                <div class="bus-marker">
+                    <div class="bus-marker-line">${bus.linha || ''}</div>
+                </div>
+            `,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        const marker = L.marker([bus.latitude, bus.longitude], {icon: markerIcon});
+
+        marker.bindPopup(`
+            <strong>Ônibus ${bus.ordem || 'N/A'}</strong><br>
+            Linha: ${bus.linha || 'N/A'}<br>
+            Velocidade: ${bus.velocidade || '0'} km/h<br>
+            Última atualização: ${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}
+        `);
+
+        // Adicionar dados customizados para popup de cluster
+        marker.busData = bus;
+
+        busMarkers[bus.ordem] = marker;
+        markers.push(marker);
+    });
+
+    // Adicionar marcadores conforme o modo atual
+    if (clusterEnabled) {
+        // Adicionar todos os marcadores ao cluster
+        markerCluster.addLayers(markers);
+
+        // Configurar popup personalizado para clusters
+        markerCluster.off('clusterclick'); // Remover event listeners anteriores
+        markerCluster.on('clusterclick', function (a) {
+            const clusterMarkers = a.layer.getAllChildMarkers();
+            const popupContent = createClusterPopupContent(clusterMarkers);
+
+            L.popup()
+                .setLatLng(a.latlng)
+                .setContent(popupContent)
+                .openOn(map);
+        });
+    } else {
+        // Adicionar marcadores individualmente ao mapa
+        markers.forEach(marker => {
+            marker.addTo(map);
+        });
+    }
+
+    const totalBuses = markers.length;
+    const totalText = showAll ?
+        `${totalBuses} de ${allBusesData.length} ônibus no mapa (todos)` :
+        `${totalBuses} ônibus no mapa`;
+
+    document.getElementById('map-buses-count').textContent = totalText;
+
+    // Atualizar estado do botão de cluster
+    updateClusterButtonState();
+
+    if (!userInteracting && totalBuses > 0) {
+        if (!currentMapView || currentZoom === 12) {
+            if (clusterEnabled) {
+                markerCluster.refreshClusters();
+                map.fitBounds(markerCluster.getBounds().pad(0.1));
+            } else {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        } else {
+            map.setView(currentCenter, currentZoom);
+        }
+    }
+
+    saveMapView();
+    updateClusterBehavior();
+
+    // Forçar redesenho do mapa para garantir que tudo seja renderizado corretamente
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
+};
+
+const updateClusterButtonState = () => {
+    const clusterButton = document.getElementById('toggle-cluster');
+    const totalBuses = Object.keys(busMarkers).length;
+
+    if (clusterEnabled) {
+        clusterButton.textContent = 'Desativar Cluster';
+        clusterButton.disabled = totalBuses === 0;
+    } else {
+        clusterButton.textContent = 'Ativar Cluster';
+        clusterButton.disabled = totalBuses === 0;
+    }
+
+    // Atualizar tooltip para indicar estado
+    clusterButton.title = clusterEnabled ?
+        'Desativar agrupamento de marcadores' :
+        'Ativar agrupamento de marcadores';
+};
+
+const createClusterPopupContent = (markers) => {
+    const lines = new Set();
+    const orders = [];
+
+    markers.slice(0, 20).forEach(marker => {
+        if (marker.busData) {
+            lines.add(marker.busData.linha || 'N/A');
+            orders.push(marker.busData.ordem || 'N/A');
+        }
+    });
+
+    const total = markers.length;
+    const linesList = Array.from(lines).join(', ');
+
+    return `
+        <div class="cluster-popup">
+            <h4>Cluster de Ônibus</h4>
+            <p><strong>Total:</strong> ${total} ônibus</p>
+            <p><strong>Linhas:</strong> ${linesList}</p>
+            ${total > 20 ? `<p><em>Mostrando 20 de ${total} ônibus</em></p>` : ''}
+            <div class="cluster-popup-list">
+                ${markers.slice(0, 20).map(marker =>
+                    `<div class="cluster-popup-item">
+                        Ônibus ${marker.busData?.ordem || 'N/A'} - Linha ${marker.busData?.linha || 'N/A'}
+                    </div>`
+                ).join('')}
+            </div>
+        </div>
+    `;
+};
+
+const clearAllMapLayers = () => {
+    // Remover todos os marcadores individuais
+    Object.values(busMarkers).forEach(marker => {
+        if (map.hasLayer(marker)) {
+            map.removeLayer(marker);
+        }
+    });
+
+    // Remover e recriar o cluster group
+    if (markerCluster && map.hasLayer(markerCluster)) {
+        map.removeLayer(markerCluster);
+    }
+
+    markerCluster = L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkInterval: 100,
+        disableClusteringAtZoom: 16,
+        maxClusterRadius: 80,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: true,
+        zoomToBoundsOnClick: true,
+        iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = 'small';
+            if (count > 100) size = 'large';
+            else if (count > 10) size = 'medium';
+
+            return L.divIcon({
+                html: `<div class="cluster cluster-${size}">${count}</div>`,
+                className: 'marker-cluster-custom',
+                iconSize: L.point(40, 40)
+            });
+        }
+    });
+
+    if (clusterEnabled) {
+        map.addLayer(markerCluster);
+    }
+};
+
+const updateClusterBehavior = () => {
+    if (!markerCluster) return;
+
+    // Ajustar comportamento baseado no nível de zoom
+    if (currentZoomLevel >= 15) {
+        // Zoom alto: mostrar marcadores individuais
+        markerCluster.options.disableClusteringAtZoom = currentZoomLevel;
+        markerCluster.options.maxClusterRadius = 40;
+    } else if (currentZoomLevel >= 12) {
+        // Zoom médio: clusterização moderada
+        markerCluster.options.disableClusteringAtZoom = 16;
+        markerCluster.options.maxClusterRadius = 60;
+    } else {
+        // Zoom baixo: clusterização agressiva
+        markerCluster.options.disableClusteringAtZoom = 14;
+        markerCluster.options.maxClusterRadius = 80;
+    }
+
+    // Forçar atualização dos clusters
+    markerCluster.refreshClusters();
+};
 
     // Mostrar ou esconder o mapa
-    const toggleMapVisibility = (visible) => {
-        const mapContainer = document.getElementById('map-container');
-        const toggleButton = document.getElementById('toggle-map');
+   const toggleMapVisibility = (visible) => {
+    const mapContainer = document.getElementById('map-container');
+    const toggleButton = document.getElementById('toggle-map');
 
-        if (visible) {
-            // Inicializar o mapa se não foi inicializado ainda
-            if (!mapInitialized) {
-                initMap();
-            }
-
-            mapContainer.style.display = 'block';
-            toggleButton.textContent = 'Ocultar Mapa';
-
-            // Atualizar marcadores no mapa
-            updateMapMarkers(showingAllBuses);
-
-            // Redimensionar o mapa para garantir que ele se renderize corretamente
-            setTimeout(() => {
-                if (mapInitialized) map.invalidateSize();
-            }, 100);
-        } else {
-            mapContainer.style.display = 'none';
-            toggleButton.textContent = 'Mostrar Mapa';
+    if (visible) {
+        if (!mapInitialized) {
+            initMap();
         }
 
-        showMap = visible;
-    };
+        mapContainer.style.display = 'block';
+        toggleButton.textContent = 'Ocultar Mapa';
+
+        // Restaurar clusterização se estava ativa
+        if (clusterEnabled && markerCluster) {
+            map.addLayer(markerCluster);
+        }
+
+        updateMapMarkers(showingAllBuses);
+
+        setTimeout(() => {
+            if (mapInitialized) map.invalidateSize();
+        }, 100);
+    } else {
+        mapContainer.style.display = 'none';
+        toggleButton.textContent = 'Mostrar Mapa';
+    }
+
+    showMap = visible;
+};
 
     // Carregar dados de itinerário da API
     const loadItineraryData = async () => {
