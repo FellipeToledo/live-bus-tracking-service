@@ -1,0 +1,70 @@
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-sm);
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .search-container {
+        flex-direction: column;
+    }
+
+    .search-group {
+        min-width: 100%;
+    }
+
+    .map-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .map-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .address-search {
+        flex-direction: column;
+    }
+
+    .itinerary-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    /* Ajustes para tabela em dispositivos móveis */
+    #buses-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    /* Esconder algumas colunas em mobile */
+    #buses-table th:nth-child(3),
+    #buses-table td:nth-child(3),
+    #buses-table th:nth-child(4),
+    #buses-table td:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Ajustes adicionais para telas muito pequenas */
+    .stat-value {
+        font-size: var(--font-size-lg);
+    }
+
+    .pagination button {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    /* Esconder ainda mais colunas se necessário */
+    #buses-table th:nth-child(6),
+    #buses-table td:nth-child(6) {
+        display: none;
+    }
+}

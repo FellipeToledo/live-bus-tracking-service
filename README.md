@@ -18,7 +18,8 @@ O Live Bus Tracking Service é um microserviço desenvolvido com Spring Boot que
 
 - Java 21
 - Spring Boot 3.4.2
-- Spring WebSocket
+- WebSocket para comunicação bidirecional
+- thymeleaf como server-side Java template
 - Micrometer/Prometheus para métricas 
 - Maven como gerenciador de dependências 
 
@@ -28,13 +29,13 @@ O serviço pode ser configurado através do arquivo `application.yml`:
 
 ```yaml
 gps:
-  endpoint: https://dados.mobilidade.rio/gps/sppo
-  batch-size: 10
+  endpoint:
+  batch-size:
 management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,metrics
+        include: 
 ```
 
 ## Como Usar
@@ -47,19 +48,19 @@ management:
 ### Compilação 
 
 ```bash
-mvn clean package
+  mvn clean package
 ```
 
 ### Execução 
 
 ```bash
-java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
+  java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
 ```
-### Prometheus
-```bash
-/Downloads/prometheus-3.6.0-rc.0.windows-amd64/prometheus-3.6.0-rc.0.windows-amd64
 
-java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
+### Prometheus
+/"prometheus-folder"
+```bash
+  java -jar target/live-bus-tracking-service-0.0.1-SNAPSHOT.jar
 ```
 
 

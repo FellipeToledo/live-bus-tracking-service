@@ -1,0 +1,33 @@
+/* Estilos para tabela */
+#buses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--spacing-lg);
+}
+
+#buses-table th,
+#buses-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#buses-table th {
+    background-color: var(--background-light);
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#buses-table tr:hover {
+    background-color: var(--background-light);
+}
+
+.no-results {
+    text-align: center;
+    padding: var(--spacing-lg);
+    color: var(--medium-gray);
+    font-style: italic;
+}

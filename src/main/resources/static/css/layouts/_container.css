@@ -1,0 +1,22 @@
+/* Layout do container principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow);
+}
+
+@media (max-width: 1200px) {
+    .container {
+        margin: 0 var(--spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 0 var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+}

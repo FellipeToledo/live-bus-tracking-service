@@ -1,0 +1,76 @@
+/* Estilos para filtros */
+.search-container {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.search-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-label {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+    color: var(--dark-gray);
+    font-weight: bold;
+}
+
+.search-input {
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-md);
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+#search-map-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--success-color);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    align-self: flex-end;
+    margin-top: 23px;
+    height: 40px;
+    font-size: var(--font-size-md);
+    transition: var(--transition);
+}
+
+#search-map-btn:hover {
+    background-color: #45a049;
+}
+
+.clear-filters {
+    background-color: var(--danger-color);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-md);
+    transition: var(--transition);
+}
+
+.clear-filters:hover {
+    background-color: #c0392b;
+}
+
+.last-update {
+    text-align: right;
+    font-size: var(--font-size-sm);
+    color: var(--medium-gray);
+    margin-bottom: var(--spacing-md);
+}

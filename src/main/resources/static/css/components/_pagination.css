@@ -1,0 +1,39 @@
+/* Estilos para paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: var(--spacing-lg) 0;
+    gap: var(--spacing-sm);
+}
+
+.pagination button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    background-color: var(--background-light);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: var(--background-medium);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination button.active {
+    background-color: var(--success-color);
+    color: var(--white);
+    border-color: var(--success-color);
+}
+
+#page-info,
+#page-info-bottom {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    color: var(--medium-gray);
+}

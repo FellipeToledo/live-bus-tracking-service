@@ -1,0 +1,61 @@
+/* Importar todos os partials */
+@import url('./utils/_variables.css');
+@import url('./utils/_helpers.css');
+@import url('./utils/_media-queries.css');
+@import url('./layouts/_container.css');
+@import url('./layouts/_header.css');
+@import url('./layouts/_main.css');
+@import url('./components/_stats.css');
+@import url('./components/_filters.css');
+@import url('./components/_table.css');
+@import url('./components/_pagination.css');
+@import url('./components/_map.css');
+
+/* Estilos globais */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: var(--spacing-lg);
+    background-color: var(--light-gray);
+    line-height: 1.6;
+    color: var(--dark-gray);
+}
+
+/* Melhorias de acessibilidade */
+button:focus,
+input:focus,
+select:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Animações de transição suave */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-down {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

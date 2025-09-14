@@ -1,0 +1,35 @@
+/* Estilos para estatísticas */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--background-medium);
+    border-radius: var(--border-radius);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--medium-gray);
+}
+
+.status-connected {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.status-disconnected {
+    color: var(--danger-color);
+    font-weight: bold;
+}
