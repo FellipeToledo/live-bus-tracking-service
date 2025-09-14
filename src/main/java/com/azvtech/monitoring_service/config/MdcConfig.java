@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.config;
+package com.azvtech.monitoring_service.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

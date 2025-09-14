@@ -1,10 +1,10 @@
-package com.azvtech.live_bus_tracking_service;
+package com.azvtech.monitoring_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LiveBusTrackingServiceApplicationTests {
+class MonitoringServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

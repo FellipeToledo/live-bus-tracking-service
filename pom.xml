@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.azvtech</groupId>
-	<artifactId>live-bus-tracking-service</artifactId>
+	<artifactId>monitoring-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Live Bus Tracking Service</name>
+	<name>Monitoring Service</name>
 	<description>
         Service responsible for collecting real-time GPS data from buses,
         applying business rules, and notifying customers via WebSocket.

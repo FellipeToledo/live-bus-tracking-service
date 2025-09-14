@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.dto;
+package com.azvtech.monitoring_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

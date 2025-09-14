@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.exception;
+package com.azvtech.monitoring_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

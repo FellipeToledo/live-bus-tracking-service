@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.config.metrics;
+package com.azvtech.monitoring_service.config.metrics;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;

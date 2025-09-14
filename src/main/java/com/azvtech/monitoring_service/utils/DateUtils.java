@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.utils;
+package com.azvtech.monitoring_service.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

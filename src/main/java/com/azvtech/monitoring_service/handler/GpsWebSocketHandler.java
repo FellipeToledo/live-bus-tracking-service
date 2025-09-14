@@ -1,6 +1,6 @@
-package com.azvtech.live_bus_tracking_service.handler;
+package com.azvtech.monitoring_service.handler;
 
-import com.azvtech.live_bus_tracking_service.dto.GpsDataDTO;
+import com.azvtech.monitoring_service.dto.GpsDataDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

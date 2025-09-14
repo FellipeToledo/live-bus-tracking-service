@@ -1,6 +1,6 @@
-package com.azvtech.live_bus_tracking_service.config;
+package com.azvtech.monitoring_service.config;
 
-import com.azvtech.live_bus_tracking_service.handler.GpsWebSocketHandler;
+import com.azvtech.monitoring_service.handler.GpsWebSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

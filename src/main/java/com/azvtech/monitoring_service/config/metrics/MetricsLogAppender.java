@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.config.metrics;
+package com.azvtech.monitoring_service.config.metrics;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;

@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service;
+package com.azvtech.monitoring_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class LiveBusTrackingServiceApplication {
+public class MonitoringServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LiveBusTrackingServiceApplication.class, args);
+		SpringApplication.run(MonitoringServiceApplication.class, args);
 	}
 
 }

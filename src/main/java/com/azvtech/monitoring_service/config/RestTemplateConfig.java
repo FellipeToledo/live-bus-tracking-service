@@ -1,4 +1,4 @@
-package com.azvtech.live_bus_tracking_service.config;
+package com.azvtech.monitoring_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
