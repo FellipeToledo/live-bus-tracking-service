@@ -10,19 +10,6 @@ let sortDirection = 1;
 let itineraryData = null; // Armazenará todos os dados de itinerário
 let currentItineraryLines = {}; // Armazenará as linhas de itinerário atualmente exibidas
 
-// Função para formatar o endereço extraindo apenas as partes relevantes
-const formatAddress = (displayName) => {
-    // Dividir o endereço por vírgulas
-    const parts = displayName.split(',');
-    // Manter apenas os primeiros elementos (rua, bairro, cidade)
-    if (parts.length >= 3) {
-        // Juntar os três primeiros componentes
-        return `${parts[0].trim()}, ${parts[1].trim()}, ${parts[2].trim()}`;
-    }
-    // Se não tiver pelo menos 3 partes, retornar o original
-    return displayName;
-};
-
 // Buscar sugestões de endereço usando Nominatim com filtro para Rio de Janeiro
 const fetchAddressSuggestions = async (query) => {
     if (!query || query.length < 3) {
@@ -46,7 +33,7 @@ const fetchAddressSuggestions = async (query) => {
                 const suggestion = document.createElement('div');
                 suggestion.className = 'autocomplete-suggestion';
                 // Formatar o endereço para exibição (apenas partes relevantes)
-                const displayText = formatAddress(item.display_name);
+                const displayText = Utils.formatAddress(item.display_name);
                 suggestion.textContent = displayText;
                 // Armazenar o endereço completo em um atributo de dados
                 suggestion.setAttribute('data-full-address', item.display_name);
@@ -144,20 +131,11 @@ const loadItineraryData = async () => {
     }
 };
 
-const getFilteredLines = () => {
-    const lines = new Set();
-    filteredBusesData.forEach(bus => {
-        if (bus.linha) {
-            lines.add(bus.linha);
-        }
-    });
-    return Array.from(lines);
-};
 // Mostrar itinerário no mapa
 const showItinerary = () => {
     const selectedDirection = document.getElementById('itinerary-direction-select').value;
     // Obter linhas dos ônibus filtrados
-    const filteredLines = getFilteredLines();
+    const filteredLines = Utils.getUniqueLines(filteredBusesData);
     if (filteredLines.length === 0) {
         alert('Nenhuma linha encontrada nos filtros atuais. Ajuste os filtros primeiro.');
         return;
@@ -295,7 +273,7 @@ const renderTable = () => {
                 <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
                 <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
                 <td>${bus.velocidade || '0'}</td>
-                <td>${bus.datahoraservidor ? new Date(bus.datahoraservidor).toLocaleString() : 'N/A'}</td>
+                <td>${Utils.formatDate(bus.datahoraservidor)}</td>
             </tr>
         `;
     });
@@ -372,7 +350,7 @@ const performSearch = () => {
     updateStats();
     renderTable();
     // Atualizar informações de itinerário disponível
-    const filteredLines = getFilteredLines();
+    const filteredLines = Utils.getUniqueLines(filteredBusesData);
     if (filteredLines.length > 0) {
         document.getElementById('itinerary-info').textContent =
             `${filteredLines.length} linha(s) disponível(is) para mostrar itinerário: ${filteredLines.join(', ')}`;
