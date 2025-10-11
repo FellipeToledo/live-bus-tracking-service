@@ -63,7 +63,7 @@ const connectWebSocket = () => {
 
                     // Atualizar interface
                     updateStats();
-                    renderTable();
+                //    renderTable();
 
                     // Atualizar mapa apenas se estiver visível
                     if (showMap) {
@@ -80,7 +80,7 @@ const connectWebSocket = () => {
                 allBusesData = [...message];
                 applyFilters();
                 updateStats();
-                renderTable();
+               // renderTable();
 
                 // Atualizar mapa apenas se estiver visível
                 if (showMap) {

@@ -11,7 +11,7 @@
 	<groupId>com.azvtech</groupId>
 	<artifactId>monitoring-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Monitoring Service</name>
+	<name>Monitoring Service</name>thy
 	<description>
         Service responsible for collecting real-time GPS data from buses,
         applying business rules, and notifying customers via WebSocket.

@@ -1,27 +1,70 @@
+# =============================================================================
+# Application Configuration - GPS Monitoring Service
+# =============================================================================
+
+# =============================================================================
+# GPS Service Configuration
+# Configurações específicas do serviço de monitoramento GPS
+# =============================================================================
 gps:
+  # Endpoint da API externa para coleta de dados GPS
+  # Valor pode ser sobrescrito pela variável de ambiente ENDPOINT_GPS
   endpoint: ${ENDPOINT_GPS}
+  
+  # Tamanho do lote para transmissão via WebSocket
+  # Controla quantos registros são enviados por vez para os clientes
   batch-size: 10
 
-# logging
+# =============================================================================
+# Logging Configuration
+# =============================================================================
 logging:
+  # Padrão de formatação dos logs
   pattern:
+    # Formato: nível [nome-aplicacao,traceId,spanId]
+    # - %5p: Nível do log com 5 caracteres (INFO, DEBUG, ERROR)
+    # - %X{traceId}: Correlation ID para rastreamento distribuído
+    # - %X{spanId}: ID do span para tracing de operações
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  
+  # Configuração de níveis de log por pacote
   level:
+    # Log nível DEBUG para pacotes da aplicação
     com.azvtech: DEBUG
+    
+    # Log nível INFO para framework Spring Web
     org.springframework.web: INFO
+    
+    # Log nível INFO para agendamento de tarefas
     org.springframework.scheduling: INFO
+  
+  # Configuração de arquivo de log
   file:
+    # Caminho e nome do arquivo de log
     name: logs/app.log
+  
+  # Política de rotação de logs (Logback)
   logback:
     rollingpolicy:
+      # Tamanho máximo do arquivo antes da rotação
       max-file-size: 10MB
+      
+      # Número de dias para manter arquivos de log históricos
       max-history: 30
 
+# =============================================================================
+# Spring Boot Actuator Configuration
+# =============================================================================
 management:
+  # Configuração de endpoints expostos
   endpoints:
     web:
       exposure:
+        # Endpoints do Actuator expostos via HTTP
         include: prometheus,health,metrics
+  
+  # Configuração específica do endpoint de health
   endpoint:
     health:
+      # Exibe detalhes completos do health check
       show-details: ALWAYS

@@ -2,9 +2,7 @@
 
 let allBusesData = [];
 let filteredBusesData = [];
-let currentPage = 1;
-const itemsPerPage = 50;
-let currentSortColumn = -1;
+
 let sortDirection = 1;
 // Variáveis para itinerários
 let itineraryData = null; // Armazenará todos os dados de itinerário
@@ -124,10 +122,10 @@ const loadItineraryData = async () => {
         const response = await fetch('https://pgeo3.rio.rj.gov.br/arcgis/rest/services/Hosted/Itiner%C3%A1rios_da_rede_de_transporte_p%C3%BAblico_por_%C3%B4nibus_(SPPO)/FeatureServer/1/query?outFields=*&where=1%3D1&f=geojson');
         itineraryData = await response.json();
         console.log('Dados de itinerário carregados:', itineraryData);
-        document.getElementById('itinerary-info').textContent = 'Dados de itinerário carregados';
+        // document.getElementById('itinerary-info').textContent = 'Dados de itinerário carregados';
     } catch (error) {
         console.error('Erro ao carregar dados de itinerário:', error);
-        document.getElementById('itinerary-info').textContent = 'Erro ao carregar itinerários';
+       // document.getElementById('itinerary-info').textContent = 'Erro ao carregar itinerários';
     }
 };
 
@@ -151,7 +149,7 @@ const showItinerary = () => {
         feature.properties && filteredLines.includes(feature.properties.servico)
     );
     if (lineFeatures.length === 0) {
-        document.getElementById('itinerary-info').textContent = 'Nenhum itinerário encontrado para as linhas filtradas';
+       //  document.getElementById('itinerary-info').textContent = 'Nenhum itinerário encontrado para as linhas filtradas';
         return;
     }
     // Filtrar por direção se necessário
@@ -166,7 +164,7 @@ const showItinerary = () => {
     }
     if (featuresToShow.length === 0) {
         const directionName = selectedDirection === '0' ? 'volta' : 'ida';
-        document.getElementById('itinerary-info').textContent = `Nenhum itinerário de ${directionName} encontrado para as linhas filtradas`;
+      // document.getElementById('itinerary-info').textContent = `Nenhum itinerário de ${directionName} encontrado para as linhas filtradas`;
         return;
     }
     // Adicionar cada itinerário ao mapa
@@ -215,8 +213,8 @@ const showItinerary = () => {
     // Atualizar informação
     const directionText = selectedDirection === 'both' ? 'idas e voltas' :
                         (selectedDirection === '1' ? 'ida' : 'volta');
-    document.getElementById('itinerary-info').textContent =
-        `Itinerário(s) de ${filteredLines.length} linha(s) (${directionText}) exibido(s): ${filteredLines.join(', ')}`;
+  //  document.getElementById('itinerary-info').textContent =
+   //     `Itinerário(s) de ${filteredLines.length} linha(s) (${directionText}) exibido(s): ${filteredLines.join(', ')}`;
 };
 
 // Ocultar itinerários do mapa
@@ -228,7 +226,7 @@ const hideItinerary = () => {
         });
     });
     currentItineraryLines = {};
-    document.getElementById('itinerary-info').textContent = 'Itinerário oculto';
+   // document.getElementById('itinerary-info').textContent = 'Itinerário oculto';
 };
 
 // Aplicar filtros de linha e ordem
@@ -254,101 +252,101 @@ const applyFilters = () => {
     }
 };
 
-// Atualizar a tabela com os dados recebidos
-const renderTable = () => {
-    const tableBody = document.getElementById('buses-body');
-    if (filteredBusesData.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Nenhum ônibus encontrado</td></tr>';
-        return;
-    }
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, filteredBusesData.length);
-    const pageData = filteredBusesData.slice(startIndex, endIndex);
-    let tableHtml = '';
-    pageData.forEach(bus => {
-        tableHtml += `
-            <tr>
-                <td>${bus.ordem || 'N/A'}</td>
-                <td>${bus.linha || 'N/A'}</td>
-                <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
-                <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
-                <td>${bus.velocidade || '0'}</td>
-                <td>${Utils.formatDate(bus.datahoraservidor)}</td>
-            </tr>
-        `;
-    });
-    tableBody.innerHTML = tableHtml;
-    updatePagination();
-};
+//// Atualizar a tabela com os dados recebidos
+//const renderTable = () => {
+//    const tableBody = document.getElementById('buses-body');
+//    if (filteredBusesData.length === 0) {
+//        tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Nenhum ônibus encontrado</td></tr>';
+//        return;
+//    }
+//    const startIndex = (currentPage - 1) * itemsPerPage;
+//    const endIndex = Math.min(startIndex + itemsPerPage, filteredBusesData.length);
+//    const pageData = filteredBusesData.slice(startIndex, endIndex);
+//    let tableHtml = '';
+//    pageData.forEach(bus => {
+//        tableHtml += `
+//            <tr>
+//                <td>${bus.ordem || 'N/A'}</td>
+//                <td>${bus.linha || 'N/A'}</td>
+//                <td>${bus.latitude ? bus.latitude.toFixed(6) : 'N/A'}</td>
+//                <td>${bus.longitude ? bus.longitude.toFixed(6) : 'N/A'}</td>
+//                <td>${bus.velocidade || '0'}</td>
+//                <td>${Utils.formatDate(bus.datahoraservidor)}</td>
+//            </tr>
+//        `;
+//    });
+//    tableBody.innerHTML = tableHtml;
+//    updatePagination();
+// };
 
 // Atualizar estatísticas
 const updateStats = () => {
     document.getElementById('total-buses').textContent = allBusesData.length;
     document.getElementById('visible-buses').textContent = filteredBusesData.length;
-    // Mostrar informações dos filtros ativos
-    const lineFilter = document.getElementById('search-line').value.trim();
-    const orderFilter = document.getElementById('search-order').value.trim();
-    let filterInfo = '';
-    if (lineFilter) {
-        const lineCount = lineFilter.split(',').length;
-        filterInfo += `${lineCount} linha(s) `;
-    }
-    if (orderFilter) {
-        const orderCount = orderFilter.split(',').length;
-        if (filterInfo) filterInfo += 'e ';
-        filterInfo += `${orderCount} ordem(ns)`;
-    }
+//    // Mostrar informações dos filtros ativos
+//    const lineFilter = document.getElementById('search-line').value.trim();
+//    const orderFilter = document.getElementById('search-order').value.trim();
+//    let filterInfo = '';
+//    if (lineFilter) {
+//        const lineCount = lineFilter.split(',').length;
+//        filterInfo += `${lineCount} linha(s) `;
+//    }
+//    if (orderFilter) {
+//        const orderCount = orderFilter.split(',').length;
+//        if (filterInfo) filterInfo += 'e ';
+//        filterInfo += `${orderCount} ordem(ns)`;
+//    }
 };
 
-// Atualizar controles de paginação
-const updatePagination = () => {
-    const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-    const pageInfo = `Página ${currentPage} de ${totalPages}`;
-    document.getElementById('page-info').textContent = pageInfo;
-    document.getElementById('page-info-bottom').textContent = pageInfo;
-    document.getElementById('prev-page').disabled = currentPage === 1;
-    document.getElementById('prev-page-bottom').disabled = currentPage === 1;
-    document.getElementById('next-page').disabled = currentPage === totalPages || totalPages === 0;
-    document.getElementById('next-page-bottom').disabled = currentPage === totalPages || totalPages === 0;
-};
+//// Atualizar controles de paginação
+//const updatePagination = () => {
+//    const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+//    const pageInfo = `Página ${currentPage} de ${totalPages}`;
+//    document.getElementById('page-info').textContent = pageInfo;
+//    document.getElementById('page-info-bottom').textContent = pageInfo;
+//    document.getElementById('prev-page').disabled = currentPage === 1;
+//    document.getElementById('prev-page-bottom').disabled = currentPage === 1;
+//    document.getElementById('next-page').disabled = currentPage === totalPages || totalPages === 0;
+//    document.getElementById('next-page-bottom').disabled = currentPage === totalPages || totalPages === 0;
+//};
+//
+//// Função para ordenar a tabela
+//const sortTable = (columnIndex) => {
+//    if (currentSortColumn === columnIndex) {
+//        sortDirection *= -1;
+//    } else {
+//        currentSortColumn = columnIndex;
+//        sortDirection = 1;
+//    }
+//    filteredBusesData.sort((a, b) => {
+//        let valueA, valueB;
+//        switch (columnIndex) {
+//            case 0: valueA = a.ordem; valueB = b.ordem; break;
+//            case 1: valueA = a.linha; valueB = b.linha; break;
+//            case 2: valueA = a.latitude; valueB = b.latitude; break;
+//            case 3: valueA = a.longitude; valueB = b.longitude; break;
+//            case 4: valueA = a.velocidade; valueB = b.velocidade; break;
+//            case 5: valueA = new Date(a.datahoraservidor); valueB = new Date(b.datahoraservidor); break;
+//            default: return 0;
+//        }
+//        if (valueA < valueB) return -1 * sortDirection;
+//        if (valueA > valueB) return 1 * sortDirection;
+//        return 0;
+//    });
+//    currentPage = 1;
+//    renderTable();
+//    // Atualizar mapa apenas se estiver visível e não estiver mostrando todos
+//    if (showMap && !showingAllBuses) {
+//        updateMapMarkers(false);
+//    }
+//};
 
-// Função para ordenar a tabela
-const sortTable = (columnIndex) => {
-    if (currentSortColumn === columnIndex) {
-        sortDirection *= -1;
-    } else {
-        currentSortColumn = columnIndex;
-        sortDirection = 1;
-    }
-    filteredBusesData.sort((a, b) => {
-        let valueA, valueB;
-        switch (columnIndex) {
-            case 0: valueA = a.ordem; valueB = b.ordem; break;
-            case 1: valueA = a.linha; valueB = b.linha; break;
-            case 2: valueA = a.latitude; valueB = b.latitude; break;
-            case 3: valueA = a.longitude; valueB = b.longitude; break;
-            case 4: valueA = a.velocidade; valueB = b.velocidade; break;
-            case 5: valueA = new Date(a.datahoraservidor); valueB = new Date(b.datahoraservidor); break;
-            default: return 0;
-        }
-        if (valueA < valueB) return -1 * sortDirection;
-        if (valueA > valueB) return 1 * sortDirection;
-        return 0;
-    });
-    currentPage = 1;
-    renderTable();
-    // Atualizar mapa apenas se estiver visível e não estiver mostrando todos
-    if (showMap && !showingAllBuses) {
-        updateMapMarkers(false);
-    }
-};
-
-// Filtrar tabela com base nos critérios de busca
+// Filtrar com base nos critérios de busca
 const performSearch = () => {
     applyFilters();
-    currentPage = 1;
+//    currentPage = 1;
     updateStats();
-    renderTable();
+//    renderTable();
     // Atualizar informações de itinerário disponível
     const filteredLines = Utils.getUniqueLines(filteredBusesData);
     if (filteredLines.length > 0) {
@@ -427,33 +425,33 @@ const initializeEventListeners = () => {
     });
     // Limpar filtros
     document.getElementById('clear-filters').addEventListener('click', clearFilters);
-    // Navegação de páginas
-    document.getElementById('next-page').addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable();
-        }
-    });
-    document.getElementById('prev-page').addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable();
-        }
-    });
-    document.getElementById('next-page-bottom').addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable();
-        }
-    });
-    document.getElementById('prev-page-bottom').addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable();
-        }
-    });
+//    // Navegação de páginas
+//    document.getElementById('next-page').addEventListener('click', () => {
+//        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+//        if (currentPage < totalPages) {
+//            currentPage++;
+//            renderTable();
+//        }
+//    });
+//    document.getElementById('prev-page').addEventListener('click', () => {
+//        if (currentPage > 1) {
+//            currentPage--;
+//            renderTable();
+//        }
+//    });
+//    document.getElementById('next-page-bottom').addEventListener('click', () => {
+//        const totalPages = Math.ceil(filteredBusesData.length / itemsPerPage);
+//        if (currentPage < totalPages) {
+//            currentPage++;
+//            renderTable();
+//        }
+//    });
+//    document.getElementById('prev-page-bottom').addEventListener('click', () => {
+//        if (currentPage > 1) {
+//            currentPage--;
+//            renderTable();
+//        }
+//    });
     // Mostrar itinerário
     document.getElementById('show-itinerary-btn').addEventListener('click', showItinerary);
     // Ocultar itinerário
