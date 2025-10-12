@@ -349,12 +349,12 @@ const performSearch = () => {
 //    renderTable();
     // Atualizar informações de itinerário disponível
     const filteredLines = Utils.getUniqueLines(filteredBusesData);
-    if (filteredLines.length > 0) {
-        document.getElementById('itinerary-info').textContent =
-            `${filteredLines.length} linha(s) disponível(is) para mostrar itinerário: ${filteredLines.join(', ')}`;
-    } else {
-        document.getElementById('itinerary-info').textContent = 'Nenhuma linha disponível para itinerário';
-    }
+   // if (filteredLines.length > 0) {
+        // document.getElementById('itinerary-info').textContent =
+        //    `${filteredLines.length} linha(s) disponível(is) para mostrar itinerário: ${filteredLines.join(', ')}`;
+   // } else {
+        // document.getElementById('itinerary-info').textContent = 'Nenhuma linha disponível para itinerário';
+   // }
     // Se estiver mostrando o mapa, atualizar com os resultados da busca
     if (showMap) {
         showingAllBuses = false;

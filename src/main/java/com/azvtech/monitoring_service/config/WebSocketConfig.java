@@ -57,6 +57,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketHandler, "/gps-updates")
-                .setAllowedOrigins("http://localhost:8080/web/monitoring", "https://websocketking.com/");
+                .setAllowedOrigins("http://localhost:8080/web/monitoring", "https://websocketking.com/", "http://localhost:4200/");
     }
 }
